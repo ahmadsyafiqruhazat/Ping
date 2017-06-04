@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "209743024000",
+    "firebase_url": "https://ping-4b443.firebaseio.com",
+    "project_id": "ping-4b443",
+    "storage_bucket": "ping-4b443.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:209743024000:android:ffb3441dc93d408d",
+        "android_client_info": {
+          "package_name": "lostboys.ping"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "209743024000-1c982ko9v6qds3rjgbpsn5kvahn4dhtr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "lostboys.ping",
+            "certificate_hash": "d0fe99c07d12be752a85787994b79e90b0dd01d0"
+          }
+        },
+        {
+          "client_id": "209743024000-79d8116pkn4ltvdb2i2o0di6402jq9hr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBt93sGxpmw44x8G1uUMjdB3IaYoicgHxQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "209743024000-79d8116pkn4ltvdb2i2o0di6402jq9hr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -2,6 +2,7 @@
     <string name="app_name">Ping</string>
     <string name="facebook_app_id">900301913442450</string>
     <string name="fb_login_protocol_scheme">fb900301913442450</string>
+    <string name="firebase_error_login">Firebase Login Error</string>
     <string name="logo">logo</string>
 
 </resources>

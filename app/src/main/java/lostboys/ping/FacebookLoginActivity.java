@@ -3,6 +3,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -46,8 +47,9 @@ public class FacebookLoginActivity extends AppCompatActivity{
             @Override
             public void onSuccess(LoginResult loginResult) {
                 handleFacebookAccessToken(loginResult.getAccessToken());
+                Intent intent = new Intent(FacebookLoginActivity.this, MapsActivity.class);
+                startActivity(intent);
             }
-
             @Override
             public void onCancel() {
                 Toast.makeText(getApplicationContext(),"Cancel",Toast.LENGTH_SHORT).show();

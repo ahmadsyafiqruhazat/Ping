@@ -1,6 +1,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:layout_width="match_parent"
+    android:background="@color/yellow">
 
     <LinearLayout
         android:orientation="vertical"
@@ -22,6 +23,14 @@
             android:ems="10"
             android:inputType="date"
             android:text="Date"/>
+
+        <EditText
+            android:id="@+id/editText2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="time"
+            android:text="Time" />
 
         <EditText
             android:id="@+id/editText8"

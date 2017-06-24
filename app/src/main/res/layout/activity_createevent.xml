@@ -32,13 +32,11 @@
             android:inputType="time"
             android:text="Time" />
 
-        <EditText
-            android:id="@+id/editText8"
+        <Button
+            android:id="@+id/location"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textMultiLine"
-            android:text="Address"/>
+            android:text="Location" />
 
         <EditText
             android:id="@+id/editText9"
@@ -48,17 +46,11 @@
             android:inputType="textMultiLine"
             android:text="Brief Description"/>
 
-        <ImageView
-            android:id="@+id/imageToUpload"
-            android:layout_gravity="center_horizontal"
-            android:layout_width="150dp"
-            android:layout_height="150dp" />
-
         <Button
-            android:id="@+id/bUploadImage"
-            android:text="Upload Image"
+            android:id="@+id/submit"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="Submit" />
 
 
     </LinearLayout>

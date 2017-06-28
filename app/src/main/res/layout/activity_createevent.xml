@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
-            android:text="Event Name" />
+            android:hint="Event Name" />
 
         <EditText
             android:id="@+id/editText10"
@@ -22,7 +22,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="date"
-            android:text="Date"/>
+            android:hint="Date"/>
 
         <EditText
             android:id="@+id/editText2"
@@ -30,7 +30,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="time"
-            android:text="Time" />
+            android:hint="Time" />
 
         <Button
             android:id="@+id/location"
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textMultiLine"
-            android:text="Brief Description"/>
+            android:hint="Brief Description"/>
 
         <Button
             android:id="@+id/submit"

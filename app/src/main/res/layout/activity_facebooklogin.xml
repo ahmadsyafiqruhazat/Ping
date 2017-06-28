@@ -26,24 +26,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp" />
+        tools:layout_editor_absoluteY="341dp"
+        tools:layout_editor_absoluteX="103dp" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/logo_ping"
-        tools:layout_editor_absoluteY="28dp"
-        app:layout_constraintRight_toRightOf="parent" />
+        tools:layout_editor_absoluteY="-20dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginRight="-16dp" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Sign in"
-        tools:layout_editor_absoluteX="185dp"
-        tools:layout_editor_absoluteY="389dp" />
+        tools:layout_editor_absoluteY="392dp"
+        tools:layout_editor_absoluteX="172dp" />
 
 
 </android.support.constraint.ConstraintLayout>

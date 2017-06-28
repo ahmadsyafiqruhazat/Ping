@@ -21,21 +21,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.facebook.login.LoginManager;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     LocationManager locationManager;
     LocationListener locationListener;
-    Button searchBtn;
-    TextView weatherTV;
-    EditText addressET;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,8 +44,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-    }
 
+    }
 
     public void onButtonClick(View view){
         Intent intent = new Intent(MapsActivity.this, EventCreate.class);
@@ -64,16 +63,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.logout: {
-                SharedPreferences sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE);
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.remove("userId");
-                editor.commit();
-                Intent myIntent = new Intent(MapsActivity.this, MainActivity.class);
+                FirebaseAuth.getInstance().signOut();
+                LoginManager.getInstance().logOut();
+                Intent myIntent = new Intent(MapsActivity.this, FacebookLoginActivity.class);
                 startActivity(myIntent);
-                break;
             }
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     @Override

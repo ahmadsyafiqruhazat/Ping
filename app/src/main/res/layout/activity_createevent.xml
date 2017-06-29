@@ -24,13 +24,12 @@
             android:inputType="date"
             android:hint="Date"/>
 
-        <EditText
-            android:id="@+id/editText2"
+        <Button
+            android:id="@+id/button2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="time"
-            android:hint="Time" />
+            android:onClick="showTimePickerDialog"
+            android:text="@string/pick_time" />
 
         <Button
             android:id="@+id/location"

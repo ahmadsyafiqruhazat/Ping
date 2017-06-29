@@ -9,20 +9,18 @@
         android:layout_height="match_parent">
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/eventName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="textPersonName"
             android:hint="Event Name" />
 
-        <EditText
-            android:id="@+id/editText10"
-            android:layout_width="match_parent"
+        <Button
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="date"
-            android:hint="Date"/>
+            android:text="@string/pick_date"
+            android:onClick="showDatePickerDialog" />
 
         <Button
             android:id="@+id/button2"
@@ -38,7 +36,7 @@
             android:text="Location" />
 
         <EditText
-            android:id="@+id/editText9"
+            android:id="@+id/eventDes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"

@@ -47,9 +47,7 @@ public class EventCreate extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_createevent);
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
+        
         name = (EditText)findViewById(R.id.eventName);
         des = (EditText)findViewById(R.id.eventDes);
         submit = (Button)findViewById(R.id.submit);

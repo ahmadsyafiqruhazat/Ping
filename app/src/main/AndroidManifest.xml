@@ -72,6 +72,9 @@
         <activity
             android:name=".EventCreate"
             android:launchMode="singleInstance"/>
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBFO4hjCEc3l-qajgYRhdu_YzusMsjFYcc"/>
 
     </application>
 

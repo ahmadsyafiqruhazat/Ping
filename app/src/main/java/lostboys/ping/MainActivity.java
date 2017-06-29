@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void goMap() {
-        Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+       Intent intent = new Intent(MainActivity.this, MapsActivity.class);
         startActivity(intent);
     }
 

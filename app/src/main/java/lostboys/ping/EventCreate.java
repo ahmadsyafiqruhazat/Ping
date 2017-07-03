@@ -19,6 +19,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -41,6 +42,7 @@ public class EventCreate extends FragmentActivity
     private FirebaseUser mFirebaseUser;
     private EditText name,des;
     private Button submit;
+    private double lon,lat;
     private int pickerHour,pickerMin,pickerYear,pickerMonth,pickerDay;
     int PLACE_PICKER_REQUEST = 1;
 
@@ -59,7 +61,8 @@ public class EventCreate extends FragmentActivity
                 mDatabase =  FirebaseDatabase.getInstance().getReference("users");
                 eventCloudEndPoint =  mDatabase.child(
                         mFirebaseUser.getUid()).child("events").child(name.getText().toString());
-                EventEntry event = new EventEntry(name.getText().toString(), pickerHour,pickerMin,pickerYear,pickerMonth,pickerDay,des.getText().toString());
+                EventEntry event = new EventEntry(name.getText().toString(), pickerHour,pickerMin,
+                        pickerYear,pickerMonth,pickerDay,des.getText().toString(),lat,lon);
 
                 eventCloudEndPoint.setValue(event).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -70,8 +73,6 @@ public class EventCreate extends FragmentActivity
                 finish();
             }
         });
-
-
     }
 
     public void showTimePickerDialog(View v) {
@@ -95,15 +96,11 @@ public class EventCreate extends FragmentActivity
         pickerYear = year;
         pickerMonth = month;
         pickerDay= day;
-
     }
 
     public void showPlacePicker(View v) throws GooglePlayServicesNotAvailableException, GooglePlayServicesRepairableException {
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
-
         startActivityForResult(builder.build(this), PLACE_PICKER_REQUEST);
-
-
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -112,6 +109,9 @@ public class EventCreate extends FragmentActivity
                 Place place = PlacePicker.getPlace(data, this);
                 String toastMsg = String.format("Place: %s", place.getName());
                 Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+                LatLng selectedLocation = place.getLatLng();
+                lat = selectedLocation.latitude;
+                lon = selectedLocation.longitude;
             }
         }
     }

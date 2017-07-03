@@ -12,7 +12,11 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+<<<<<<< HEAD
+import android.text.format.DateFormat;
+=======
 import android.text.TextUtils;
+>>>>>>> 10b341c4bbab09e1da8f27f69b927d868b31fffb
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,6 +47,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import lostboys.ping.Models.EventEntry;
@@ -127,7 +133,12 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 }
                 for(EventEntry event : mEventEntries){
                     LatLng eventLoc = new LatLng(event.lat, event.lon);
-                    Marker mMarker = mMap.addMarker(new MarkerOptions().position(eventLoc).title(event.name).snippet(event.des));
+                    Calendar cal = new GregorianCalendar();
+                    cal.set(event.pickerYear,event.pickerMonth,event.pickerDay,event.pickerHour, event.pickerMin);
+                    long time = cal.getTimeInMillis();
+                    String formatted = (DateFormat.format("EEE, MMM d, 'at' HH:mm:ss", time))
+                            .toString();
+                    Marker mMarker = mMap.addMarker(new MarkerOptions().position(eventLoc).title(event.name).snippet(formatted));
                     mMarker.setTag(event.key);
                 }
             }

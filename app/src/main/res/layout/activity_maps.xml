@@ -64,9 +64,13 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginBottom="65dp"
-            android:layout_marginEnd="24dp"
+<<<<<<< HEAD
             android:layout_gravity="bottom|right"
+            android:layout_marginBottom="43dp"
+=======
+            android:layout_marginBottom="65dp"
+>>>>>>> 10b341c4bbab09e1da8f27f69b927d868b31fffb
+            android:layout_marginEnd="24dp"
             android:clickable="true"
             android:onClick="onButtonClick"
             map:backgroundTint="@color/colorPrimary"

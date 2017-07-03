@@ -27,7 +27,6 @@ public class FacebookLoginActivity extends AppCompatActivity{
 
     private LoginButton loginButton;
     private CallbackManager callbackManager;
-
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthListner;
 

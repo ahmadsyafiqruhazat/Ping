@@ -86,6 +86,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
             }
         });
 
+        // address and search engine
         addressET = (EditText) findViewById(R.id.addressET);
         searchBtn = (Button) findViewById(R.id.searchBtn);
         searchBtn.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +104,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         });
     }
 
-    public void updateMap(String address){
+    public void updateMap(String address){                   // search engine update
         mMap.clear();
         for(EventEntry event : mEventEntries){
             if (event.name.equals(address)) {

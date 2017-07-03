@@ -116,6 +116,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 
 
     }
+
+    // Event create button
     public void onButtonClick(View view){
         Intent intent = new Intent(MapsActivity.this, EventCreate.class);
         startActivity(intent);
@@ -179,17 +181,12 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 
             @Override
             public void onStatusChanged(String s, int i, Bundle bundle) {
-
             }
-
             @Override
             public void onProviderEnabled(String s) {
-
             }
-
             @Override
             public void onProviderDisabled(String s) {
-
             }
         };
         if (Build.VERSION.SDK_INT < 23) {

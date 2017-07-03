@@ -12,15 +12,19 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
@@ -52,6 +56,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     private DatabaseReference mDatabase;
     private List<EventEntry> mEventEntries = new ArrayList<>();
     Button searchBtn;
+    EditText addressET;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,13 +86,32 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
             }
         });
 
+        addressET = (EditText) findViewById(R.id.addressET);
         searchBtn = (Button) findViewById(R.id.searchBtn);
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(searchBtn.getApplicationWindowToken(), 0);
+                if (TextUtils.isEmpty(addressET.getText().toString())) {
+                    Toast.makeText(MapsActivity.this, "Please enter.", Toast.LENGTH_LONG).show();
+                } else {
+                    String address = addressET.getText().toString();
+                    updateMap(address);
+                }
             }
         });
+    }
+
+    public void updateMap(String address){
+        mMap.clear();
+        for(EventEntry event : mEventEntries){
+            if (event.name.equals(address)) {
+                LatLng eventLoc = new LatLng(event.lat, event.lon);
+                Marker mMarker = mMap.addMarker(new MarkerOptions().position(eventLoc).title(event.name).snippet(event.des));
+                mMarker.setTag(event.key);
+            }
+        }
     }
 
     public void populateMap(){
@@ -104,7 +128,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                     LatLng eventLoc = new LatLng(event.lat, event.lon);
                     Marker mMarker = mMap.addMarker(new MarkerOptions().position(eventLoc).title(event.name).snippet(event.des));
                     mMarker.setTag(event.key);
-
                 }
             }
 

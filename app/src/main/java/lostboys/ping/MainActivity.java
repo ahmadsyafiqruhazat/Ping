@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     goMap();
                 }
-
     }
 
     private void goMap() {

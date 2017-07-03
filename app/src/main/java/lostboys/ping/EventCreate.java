@@ -36,6 +36,7 @@ import lostboys.ping.Pickers.TimePickerFragment;
 public class EventCreate extends FragmentActivity
         implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
     private DatabaseReference mDatabase;
+    private DatabaseReference userCloudEndPoint;
     private DatabaseReference eventCloudEndPoint;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
@@ -47,7 +48,7 @@ public class EventCreate extends FragmentActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_createevent);
-        
+
         name = (EditText)findViewById(R.id.eventName);
         des = (EditText)findViewById(R.id.eventDes);
         submit = (Button)findViewById(R.id.submit);
@@ -57,10 +58,17 @@ public class EventCreate extends FragmentActivity
                 mFirebaseAuth = FirebaseAuth.getInstance();
                 mFirebaseUser = mFirebaseAuth.getCurrentUser();
                 mDatabase =  FirebaseDatabase.getInstance().getReference("users");
-                eventCloudEndPoint =  mDatabase.child(
+                eventCloudEndPoint = FirebaseDatabase.getInstance().getReference("events").child(name.getText().toString());
+                userCloudEndPoint =  mDatabase.child(
                         mFirebaseUser.getUid()).child("events").child(name.getText().toString());
                 EventEntry event = new EventEntry(name.getText().toString(), pickerHour,pickerMin,pickerYear,pickerMonth,pickerDay,des.getText().toString());
 
+                userCloudEndPoint.setValue(event).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("event", e.getLocalizedMessage());
+                    }
+                });
                 eventCloudEndPoint.setValue(event).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {

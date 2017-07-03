@@ -6,14 +6,14 @@ package lostboys.ping.Models;
 
 public class EventEntry {
 
-    public String name,des;
+    public String name,des,key;
     public int pickerHour,pickerMin,pickerYear,pickerMonth,pickerDay;
     public double lat, lon;
 
     public EventEntry(){
     }
 
-    public EventEntry(String name, int pickerHour,int pickerMin,int pickerYear,int pickerMonth,int pickerDay, String des, double lat, double lon){
+    public EventEntry(String name, int pickerHour,int pickerMin,int pickerYear,int pickerMonth,int pickerDay, String des, double lat, double lon, String key){
         this.name=name;
         this.pickerHour= pickerHour;
         this.pickerMin = pickerMin;
@@ -23,6 +23,7 @@ public class EventEntry {
         this.lat = lat;
         this.lon = lon;
         this.des=des;
+        this.key=key;
     }
 
 }

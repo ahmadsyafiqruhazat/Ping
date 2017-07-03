@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,6 +25,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -37,13 +39,14 @@ import java.util.List;
 
 import lostboys.ping.Models.EventEntry;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoWindowClickListener, OnMapReadyCallback {
 
     private static final String LOG_TAG = "123";
     private GoogleMap mMap;
     LocationManager locationManager;
     LocationListener locationListener;
     private DatabaseReference mDatabase;
+    private List<EventEntry> mEventEntries = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,14 +61,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     public void populateMap(){
         mDatabase =  FirebaseDatabase.getInstance().getReference("events");
-        final List<EventEntry> mEventEntries = new ArrayList<>();
+
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot noteSnapshot: dataSnapshot.getChildren()){
                     EventEntry events = noteSnapshot.getValue(EventEntry.class);
-
                     mEventEntries.add(events);
+                }
+                for(EventEntry event : mEventEntries){
+                    LatLng eventLoc = new LatLng(event.lat, event.lon);
+                    Marker mMarker = mMap.addMarker(new MarkerOptions().position(eventLoc).title(event.name).snippet(event.des));
+                    mMarker.setTag(event.key);
+
                 }
             }
 
@@ -75,11 +83,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-        for(EventEntry event : mEventEntries){
-            LatLng eventLoc = new LatLng(event., 103.7717432);
-            mMap.addMarker(new MarkerOptions().position(eventLoc).title("Your Location"));
 
-        }
     }
     public void onButtonClick(View view){
         Intent intent = new Intent(MapsActivity.this, EventCreate.class);
@@ -168,10 +172,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 // soc latlng = 1.2950362, 103.7717432
                 LatLng userLocation = new LatLng(1.2950362, 103.7717432);
                 mMap.clear();
-                mMap.addMarker(new MarkerOptions().position(userLocation).title("Your Location"));
+               // mMap.addMarker(new MarkerOptions().position(userLocation).title("Your Location"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
             }
         }
+        mMap.setOnInfoWindowClickListener(this);
+
+
+    }
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Toast.makeText(this, "Info window clicked",
+                Toast.LENGTH_SHORT).show();
     }
 }

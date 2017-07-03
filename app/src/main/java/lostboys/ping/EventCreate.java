@@ -60,11 +60,12 @@ public class EventCreate extends FragmentActivity
                 mFirebaseAuth = FirebaseAuth.getInstance();
                 mFirebaseUser = mFirebaseAuth.getCurrentUser();
                 mDatabase =  FirebaseDatabase.getInstance().getReference("users");
-                eventCloudEndPoint = FirebaseDatabase.getInstance().getReference("events").child(name.getText().toString());
+                eventCloudEndPoint = FirebaseDatabase.getInstance().getReference("events");
+                String key = eventCloudEndPoint.push().getKey();
                 userCloudEndPoint =  mDatabase.child(
-                        mFirebaseUser.getUid()).child("events").child(name.getText().toString());
+                        mFirebaseUser.getUid()).child("events").child(key);
                 EventEntry event = new EventEntry(name.getText().toString(), pickerHour,pickerMin,
-                        pickerYear,pickerMonth,pickerDay,des.getText().toString(),lat,lon);
+                        pickerYear,pickerMonth,pickerDay,des.getText().toString(),lat,lon,key);
 
                 userCloudEndPoint.setValue(event).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -72,7 +73,7 @@ public class EventCreate extends FragmentActivity
                         Log.d("event", e.getLocalizedMessage());
                     }
                 });
-                eventCloudEndPoint.setValue(event).addOnFailureListener(new OnFailureListener() {
+                eventCloudEndPoint.child(key).setValue(event).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d("event", e.getLocalizedMessage());

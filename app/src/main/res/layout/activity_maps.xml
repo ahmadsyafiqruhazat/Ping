@@ -27,7 +27,17 @@
             android:layout_marginRight="100dp"
             android:layout_marginTop="11dp"
             android:background="#FFF"
-            android:hint="Event name" />
+            android:hint="Search for" />
+
+        <Spinner
+            android:id="@+id/event_spinner"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="100dp"
+            android:layout_marginTop="11dp"
+            android:layout_width="100dp"
+            android:background="#FFF"
+            android:layout_height="40dp" />
+
         <Button
             android:id="@+id/searchBtn"
             android:layout_width="wrap_content"

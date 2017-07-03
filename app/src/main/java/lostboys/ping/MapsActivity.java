@@ -17,6 +17,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
@@ -47,6 +51,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     LocationListener locationListener;
     private DatabaseReference mDatabase;
     private List<EventEntry> mEventEntries = new ArrayList<>();
+    Button searchBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,32 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
         populateMap();
+
+        // Spinner codes
+        Spinner dynamicSpinner = (Spinner) findViewById(R.id.event_spinner);
+        String[] items = new String[] { "Event", "Place"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, items);
+        dynamicSpinner.setAdapter(adapter);
+        dynamicSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                Log.v("item", (String) parent.getItemAtPosition(position));
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+            }
+        });
+
+        searchBtn = (Button) findViewById(R.id.searchBtn);
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     public void populateMap(){

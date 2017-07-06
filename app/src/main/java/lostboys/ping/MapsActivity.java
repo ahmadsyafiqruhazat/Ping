@@ -73,7 +73,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     Button searchBtn;
     EditText addressET;
     PopupWindow changeSortPopUp;
-    String text;
+    String text;    // spinner text
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +122,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         });
     }
 
-    public void updateMap(String address) {                   // search engine update
+    public void updateMap(String address) {          // search engine update
         mMap.clear();
         if (text.equals("Event")) {                  // search by event name
             for (EventEntry event : mEventEntries) {
@@ -159,7 +159,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 
     public void populateMap(){
         mDatabase =  FirebaseDatabase.getInstance().getReference("events");
-
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -196,6 +195,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         startActivity(intent);
     }
 
+    // Drop down menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater menuInflater = getMenuInflater();
@@ -203,6 +203,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         return super.onCreateOptionsMenu(menu);
     }
 
+    // menu options including logout
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

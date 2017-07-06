@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.BitmapDrawable;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -48,10 +50,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Locale;
 
 import lostboys.ping.Models.EventEntry;
 
@@ -68,6 +72,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     Button searchBtn;
     EditText addressET;
     PopupWindow changeSortPopUp;
+    String text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +95,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
             public void onItemSelected(AdapterView<?> parent, View view,
                                        int position, long id) {
                 Log.v("item", (String) parent.getItemAtPosition(position));
+                text = (String) parent.getItemAtPosition(position);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
@@ -115,19 +121,38 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         });
     }
 
-    public void updateMap(String address){                   // search engine update
+    public void updateMap(String address) {                   // search engine update
         mMap.clear();
-        for(EventEntry event : mEventEntries){
-            if (event.name.equals(address)) {
-                LatLng eventLoc = new LatLng(event.lat, event.lon);
-                Calendar cal = new GregorianCalendar();
-                cal.set(event.pickerYear,event.pickerMonth,event.pickerDay,event.pickerHour, event.pickerMin);
-                long time = cal.getTimeInMillis();
-                String formatted = (DateFormat.format("EEE, MMM d, 'at' HH:mm:ss", time))
-                        .toString();
-                Marker mMarker = mMap.addMarker(new MarkerOptions().position(eventLoc).title(event.name).snippet(formatted+"/n"+String.valueOf(event.members.size())+"joined."));
-                mMarker.setTag(event.key);
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(eventLoc));
+        if (text.equals("Event")) {
+            for (EventEntry event : mEventEntries) {
+                if (event.name.equals(address)) {
+                    LatLng eventLoc = new LatLng(event.lat, event.lon);
+                    Calendar cal = new GregorianCalendar();
+                    cal.set(event.pickerYear, event.pickerMonth, event.pickerDay, event.pickerHour, event.pickerMin);
+                    long time = cal.getTimeInMillis();
+                    String formatted = (DateFormat.format("EEE, MMM d, 'at' HH:mm:ss", time))
+                            .toString();
+                    Marker mMarker = mMap.addMarker(new MarkerOptions().position(eventLoc).title(event.name).snippet(formatted + "/n" + String.valueOf(event.members.size()) + "joined."));
+                    mMarker.setTag(event.key);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(eventLoc));
+                }
+            }
+        } else {
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+            try {
+                List<Address> addressResult = geocoder.getFromLocationName(address, 1);
+                if (!addressResult.isEmpty()) {
+                    Address selectedResult = addressResult.get(0);
+                    Double newLat = selectedResult.getLatitude();
+                    Double newLong = selectedResult.getLongitude();
+                    LatLng userLocation = new LatLng(newLat, newLong);
+                    mMap.clear();
+                    mMap.addMarker(new MarkerOptions().position(userLocation).title("Your Location"));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
+                    mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -154,14 +179,11 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                     mMarker.setTag(event.key);
                 }
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.d(LOG_TAG, databaseError.getMessage());
             }
         });
-
-
     }
 
     // Event create button
@@ -253,28 +275,21 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
             }
         }
         mMap.setOnInfoWindowClickListener(this);
-
-
     }
+
     @Override
     public void onInfoWindowClick(Marker marker) {
-
             // Inflate the popup_layout.xml
             RelativeLayout viewGroup = (RelativeLayout) findViewById(R.id.popup);
             LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View layout = layoutInflater.inflate(R.layout.popout, viewGroup);
-            RelativeLayout map2 = (RelativeLayout) findViewById(R.id.map2);
+
             // Creating the PopupWindow
             changeSortPopUp = new PopupWindow(this);
             changeSortPopUp.setContentView(layout);
             changeSortPopUp.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
             changeSortPopUp.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
             changeSortPopUp.setFocusable(true);
-
-            // Some offset to align the popup a bit to the left, and a bit down, relative to button's position.
-            int OFFSET_X = -20;
-            int OFFSET_Y = 95;
-
             // Clear the default translucent background
             //changeSortPopUp.setBackgroundDrawable(new BitmapDrawable());
 
@@ -284,13 +299,10 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
             // Getting a reference to Close button, and close the popup when clicked.
             Button close = (Button) layout.findViewById(R.id.close);
             close.setOnClickListener(new View.OnClickListener() {
-
                 @Override
                 public void onClick(View v) {
                     changeSortPopUp.dismiss();
                 }
             });
-
-
     }
 }

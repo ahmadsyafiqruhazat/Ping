@@ -26,6 +26,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
+
 import lostboys.ping.Models.EventEntry;
 import lostboys.ping.Pickers.DatePickerFragment;
 import lostboys.ping.Pickers.TimePickerFragment;
@@ -64,8 +66,10 @@ public class EventCreate extends FragmentActivity
                 String key = eventCloudEndPoint.push().getKey();
                 userCloudEndPoint =  mDatabase.child(
                         mFirebaseUser.getUid()).child("events").child(key);
+                ArrayList<String> members = new ArrayList<String>();
+                members.add(mFirebaseUser.getUid());
                 EventEntry event = new EventEntry(name.getText().toString(), pickerHour,pickerMin,
-                        pickerYear,pickerMonth,pickerDay,des.getText().toString(),lat,lon,key);
+                        pickerYear,pickerMonth,pickerDay,des.getText().toString(),lat,lon,key, members);
 
                 userCloudEndPoint.setValue(event).addOnFailureListener(new OnFailureListener() {
                     @Override

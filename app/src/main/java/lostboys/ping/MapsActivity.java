@@ -3,6 +3,7 @@ package lostboys.ping;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -15,6 +16,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -24,6 +27,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -59,6 +64,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     private List<EventEntry> mEventEntries = new ArrayList<>();
     Button searchBtn;
     EditText addressET;
+    PopupWindow changeSortPopUp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,7 +117,12 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         for(EventEntry event : mEventEntries){
             if (event.name.equals(address)) {
                 LatLng eventLoc = new LatLng(event.lat, event.lon);
-                Marker mMarker = mMap.addMarker(new MarkerOptions().position(eventLoc).title(event.name).snippet(event.des));
+                Calendar cal = new GregorianCalendar();
+                cal.set(event.pickerYear,event.pickerMonth,event.pickerDay,event.pickerHour, event.pickerMin);
+                long time = cal.getTimeInMillis();
+                String formatted = (DateFormat.format("EEE, MMM d, 'at' HH:mm:ss", time))
+                        .toString();
+                Marker mMarker = mMap.addMarker(new MarkerOptions().position(eventLoc).title(event.name).snippet(formatted+"/n"+String.valueOf(event.members.size())+"joined."));
                 mMarker.setTag(event.key);
             }
         }
@@ -134,7 +145,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                     long time = cal.getTimeInMillis();
                     String formatted = (DateFormat.format("EEE, MMM d, 'at' HH:mm:ss", time))
                             .toString();
-                    Marker mMarker = mMap.addMarker(new MarkerOptions().position(eventLoc).title(event.name).snippet(formatted));
+                    int size=event.members.size();
+                    Marker mMarker = mMap.addMarker(new MarkerOptions().position(eventLoc).title(event.name).snippet(formatted+",with "+String.valueOf(size)+" joining."));
                     mMarker.setTag(event.key);
                 }
             }
@@ -242,7 +254,40 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     }
     @Override
     public void onInfoWindowClick(Marker marker) {
-        Toast.makeText(this, "Info window clicked",
-                Toast.LENGTH_SHORT).show();
+
+            // Inflate the popup_layout.xml
+            LinearLayout viewGroup = (LinearLayout) findViewById(R.id.popup);
+            LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            View layout = layoutInflater.inflate(R.layout.popout, viewGroup);
+
+            // Creating the PopupWindow
+            changeSortPopUp = new PopupWindow(this);
+            changeSortPopUp.setContentView(layout);
+            changeSortPopUp.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+            changeSortPopUp.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+            changeSortPopUp.setFocusable(true);
+
+            // Some offset to align the popup a bit to the left, and a bit down, relative to button's position.
+            int OFFSET_X = -20;
+            int OFFSET_Y = 95;
+
+            // Clear the default translucent background
+            changeSortPopUp.setBackgroundDrawable(new BitmapDrawable());
+
+            // Displaying the popup at the specified location, + offsets.
+            changeSortPopUp.showAtLocation(layout, Gravity.NO_GRAVITY, 10, 10);
+
+
+            // Getting a reference to Close button, and close the popup when clicked.
+            Button close = (Button) layout.findViewById(R.id.close);
+            close.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    changeSortPopUp.dismiss();
+                }
+            });
+
+
     }
 }

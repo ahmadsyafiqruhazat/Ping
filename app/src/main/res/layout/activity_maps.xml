@@ -75,4 +75,18 @@
             map:srcCompat="@android:drawable/stat_notify_more" />
 
     </android.support.design.widget.CoordinatorLayout>
+
+    <LinearLayout
+        android:id="@+id/popup"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <Button
+            android:id="@+id/close"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Close" />
+    </LinearLayout>
 </RelativeLayout>

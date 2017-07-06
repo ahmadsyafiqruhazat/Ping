@@ -124,6 +124,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                         .toString();
                 Marker mMarker = mMap.addMarker(new MarkerOptions().position(eventLoc).title(event.name).snippet(formatted+"/n"+String.valueOf(event.members.size())+"joined."));
                 mMarker.setTag(event.key);
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(eventLoc));
             }
         }
     }

@@ -29,6 +29,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -54,6 +55,8 @@ import java.util.List;
 
 import lostboys.ping.Models.EventEntry;
 
+import static lostboys.ping.R.id.map;
+
 public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoWindowClickListener, OnMapReadyCallback {
 
     private static final String LOG_TAG = "123";
@@ -72,7 +75,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(map);
         mapFragment.getMapAsync(this);
         populateMap();
 
@@ -257,10 +260,10 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     public void onInfoWindowClick(Marker marker) {
 
             // Inflate the popup_layout.xml
-            LinearLayout viewGroup = (LinearLayout) findViewById(R.id.popup);
+            RelativeLayout viewGroup = (RelativeLayout) findViewById(R.id.popup);
             LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             View layout = layoutInflater.inflate(R.layout.popout, viewGroup);
-
+            RelativeLayout map2 = (RelativeLayout) findViewById(R.id.map2);
             // Creating the PopupWindow
             changeSortPopUp = new PopupWindow(this);
             changeSortPopUp.setContentView(layout);
@@ -273,11 +276,10 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
             int OFFSET_Y = 95;
 
             // Clear the default translucent background
-            changeSortPopUp.setBackgroundDrawable(new BitmapDrawable());
+            //changeSortPopUp.setBackgroundDrawable(new BitmapDrawable());
 
             // Displaying the popup at the specified location, + offsets.
-            changeSortPopUp.showAtLocation(layout, Gravity.NO_GRAVITY, 10, 10);
-
+            changeSortPopUp.showAtLocation(layout, Gravity.CENTER,0,0);
 
             // Getting a reference to Close button, and close the popup when clicked.
             Button close = (Button) layout.findViewById(R.id.close);

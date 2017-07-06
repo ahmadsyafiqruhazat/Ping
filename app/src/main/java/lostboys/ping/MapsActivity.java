@@ -40,6 +40,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -123,7 +124,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 
     public void updateMap(String address) {                   // search engine update
         mMap.clear();
-        if (text.equals("Event")) {
+        if (text.equals("Event")) {                  // search by event name
             for (EventEntry event : mEventEntries) {
                 if (event.name.equals(address)) {
                     LatLng eventLoc = new LatLng(event.lat, event.lon);
@@ -137,7 +138,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(eventLoc));
                 }
             }
-        } else {
+        } else {                                      // search by place
             Geocoder geocoder = new Geocoder(this, Locale.getDefault());
             try {
                 List<Address> addressResult = geocoder.getFromLocationName(address, 1);
@@ -146,8 +147,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                     Double newLat = selectedResult.getLatitude();
                     Double newLong = selectedResult.getLongitude();
                     LatLng userLocation = new LatLng(newLat, newLong);
-                    mMap.clear();
-                    mMap.addMarker(new MarkerOptions().position(userLocation).title("Your Location"));
+                    mMap.addMarker(new MarkerOptions().position(userLocation));
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
                     mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
                 }
@@ -175,7 +175,11 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                     String formatted = (DateFormat.format("EEE, MMM d, 'at' HH:mm:ss", time))
                             .toString();
                     int size=event.members.size();
-                    Marker mMarker = mMap.addMarker(new MarkerOptions().position(eventLoc).title(event.name).snippet(formatted+",with "+String.valueOf(size)+" joining."));
+                    Marker mMarker = mMap.addMarker(new MarkerOptions().position(eventLoc)
+                            .title(event.name)
+                            .snippet(formatted+",with "+String.valueOf(size)+" joining.")
+                            .icon(BitmapDescriptorFactory.defaultMarker(20))
+                            .alpha(0.6f));
                     mMarker.setTag(event.key);
                 }
             }

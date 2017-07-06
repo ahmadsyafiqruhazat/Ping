@@ -113,6 +113,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 LatLng eventLoc = new LatLng(event.lat, event.lon);
                 Marker mMarker = mMap.addMarker(new MarkerOptions().position(eventLoc).title(event.name).snippet(event.des));
                 mMarker.setTag(event.key);
+                mMap.moveCamera(CameraUpdateFactory.newLatLng(eventLoc));
             }
         }
     }

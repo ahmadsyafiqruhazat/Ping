@@ -11,7 +11,6 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/text_view_event_label"
         android:layout_alignBottom="@+id/text_view_host"
-
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_toEndOf="@+id/text_view_day"
@@ -163,6 +162,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Close" />
+
+    <Button
+        android:id="@+id/join"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Join"
+        android:layout_alignBottom="@+id/text_view_host"
+        android:layout_alignParentEnd="true" />
 
 
 </RelativeLayout>

@@ -3,7 +3,6 @@ package lostboys.ping;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -373,30 +372,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         });
 
 
-            // Inflate the popup_layout.xml
-            RelativeLayout viewGroup = (RelativeLayout) findViewById(R.id.popup);
-            LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View layout = layoutInflater.inflate(R.layout.popout, viewGroup);
-
-            // Creating the PopupWindow
-            changeSortPopUp = new PopupWindow(this);
-            changeSortPopUp.setContentView(layout);
-            changeSortPopUp.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
-            changeSortPopUp.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
-            changeSortPopUp.setFocusable(true);
-            // Clear the default translucent background
-            //changeSortPopUp.setBackgroundDrawable(new BitmapDrawable());
-
-            // Displaying the popup at the specified location, + offsets.
-            changeSortPopUp.showAtLocation(layout, Gravity.CENTER,0,0);
-
-            // Getting a reference to Close button, and close the popup when clicked.
-            Button close = (Button) layout.findViewById(R.id.close);
-            close.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    changeSortPopUp.dismiss();
-                }
-            });
+          
     }
 }

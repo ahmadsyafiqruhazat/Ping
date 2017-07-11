@@ -11,4 +11,11 @@
     <string name="pick_date">Pick Date</string>
     <string name="sign_in">Sign in</string>
 
+    <string name="drawer_item_home">home</string>
+    <string name="drawer_item_notification">notification</string>
+    <string name="drawer_item_about_us">About us</string>
+    <string name="drawer_item_contact_us">contact us</string>
+    <string name="drawer_item_feedback">feedback</string>
+    <string name="drawer_item_settings">Settings</string>
+
 </resources>

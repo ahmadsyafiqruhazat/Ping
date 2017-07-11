@@ -40,6 +40,10 @@ dependencies {
     compile 'com.google.android.gms:play-services-identity:11.0.1'
 
     testCompile 'junit:junit:4.12'
+    compile('com.mikepenz:materialdrawer:5.3.3@aar') {
+        transitive = true
+    }
+    compile 'com.mikepenz:fontawesome-typeface:4.6.0.2@aar'
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -56,6 +57,17 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mikepenz.fontawesome_typeface_library.FontAwesome;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SectionDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -84,7 +96,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     String text;    // spinner text
     private static final int GOOGLE_API_CLIENT_ID = 0;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +105,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 .findFragmentById(map);
         mapFragment.getMapAsync(this);
         populateMap();
+
+        setupNavigationDrawer();
 
         // Spinner codes
         Spinner dynamicSpinner = (Spinner) findViewById(R.id.event_spinner);
@@ -212,6 +225,106 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 Log.d(LOG_TAG, databaseError.getMessage());
             }
         });
+    }
+
+    // Navigation Drawer
+    private void setupNavigationDrawer() {
+        //if you want to update the items at a later time it is recommended to keep it in a variable
+        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(0).withName(R.string.drawer_item_home);
+        PrimaryDrawerItem item2 = new PrimaryDrawerItem().withIdentifier(1).withName(R.string.drawer_item_notification);
+        SecondaryDrawerItem item7 = (SecondaryDrawerItem) new SecondaryDrawerItem().withIdentifier(6).withName(R.string.drawer_item_about_us).withIcon(FontAwesome.Icon.faw_info_circle);
+        SecondaryDrawerItem item8 = (SecondaryDrawerItem) new SecondaryDrawerItem().withIdentifier(7).withName(R.string.drawer_item_contact_us).withIcon(FontAwesome.Icon.faw_whatsapp);
+        SecondaryDrawerItem item9 = (SecondaryDrawerItem) new SecondaryDrawerItem().withIdentifier(8).withName(R.string.drawer_item_feedback).withIcon(FontAwesome.Icon.faw_commenting);
+        SecondaryDrawerItem item10 = (SecondaryDrawerItem) new SecondaryDrawerItem().withIdentifier(9).withName(R.string.drawer_item_settings).withIcon(FontAwesome.Icon.faw_wrench);
+
+        // Create the AccountHeader
+        AccountHeader headerResult = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.color.colorPrimaryDark)
+                .addProfiles(
+                        new ProfileDrawerItem().withName(getResources().getString(R.string.app_name))
+                )
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
+                        //Any activity or Intent
+                        return true;
+                    }
+                })
+                .build();
+        //Create the drawer and remember the `Drawer` result object
+        Drawer result = new DrawerBuilder()
+                .withActivity(this)
+                .withAccountHeader(headerResult)
+                .addDrawerItems(
+                        item1, item2,
+                        new SectionDrawerItem().withName("Extras"),
+                        item7, item8, item9, item10
+                )
+
+                //Set onClick options for drawer item click
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        // do something with the clicked item :D
+                        switch (position) {
+                            //Home
+                            case 1: {
+                                break;
+                            }
+                            //Login
+                            case 2: {
+
+                                //Login Activity
+                                break;
+                            }
+
+                            case 3: {
+                                //Third activity
+                                break;
+                            }
+
+                            case 4: {
+                                break;
+                            }
+
+                            case 5: {
+
+                                break;
+
+                            }
+                            //Location
+                            case 6: {
+
+                                break;
+                            }
+                            //About us
+                            case 8: {
+                                break;
+                            }
+                            //Contact Us
+                            case 9: {
+
+                                break;
+                            }
+                            //Feedback
+                            case 10: {
+
+                                break;
+                            }
+                            //Settings
+                            case 11:{
+
+                                break;
+                            }
+
+                        }
+                        return true;
+                    }
+                })
+                .build();
+
+        result.addStickyFooterItem(new PrimaryDrawerItem().withName("Visit us again")); //Adding footer to nav drawer
     }
 
     // Event create button

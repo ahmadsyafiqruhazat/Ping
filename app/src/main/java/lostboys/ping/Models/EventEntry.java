@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class EventEntry {
 
-    public String name,des,key;
+    public String name,des,key,id, usr;
     public int pickerHour,pickerMin,pickerYear,pickerMonth,pickerDay;
     public double lat, lon;
     public ArrayList<String> members;
@@ -16,7 +16,7 @@ public class EventEntry {
     public EventEntry(){
     }
 
-    public EventEntry(String name, int pickerHour,int pickerMin,int pickerYear,int pickerMonth,int pickerDay, String des, double lat, double lon, String key, ArrayList<String> members){
+    public EventEntry(String name, int pickerHour,int pickerMin,int pickerYear,int pickerMonth,int pickerDay, String des, double lat, double lon, String key, ArrayList<String> members,String id,String usr){
         this.name=name;
         this.pickerHour= pickerHour;
         this.pickerMin = pickerMin;
@@ -28,6 +28,8 @@ public class EventEntry {
         this.des=des;
         this.key=key;
         this.members=members;
+        this.id=id;
+        this.usr=usr;
     }
 
 }

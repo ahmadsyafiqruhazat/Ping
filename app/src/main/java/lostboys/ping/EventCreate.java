@@ -46,6 +46,7 @@ public class EventCreate extends FragmentActivity
     private EditText name,des;
     private Button submit;
     private double lon,lat;
+    private String id;
     private int pickerHour,pickerMin,pickerYear,pickerMonth,pickerDay;
     int PLACE_PICKER_REQUEST = 1;
 
@@ -69,7 +70,7 @@ public class EventCreate extends FragmentActivity
                 ArrayList<String> members = new ArrayList<String>();
                 members.add(mFirebaseUser.getUid());
                 EventEntry event = new EventEntry(name.getText().toString(), pickerHour,pickerMin,
-                        pickerYear,pickerMonth,pickerDay,des.getText().toString(),lat,lon,key, members);
+                        pickerYear,pickerMonth,pickerDay,des.getText().toString(),lat,lon,key, members,id,"Ahmad Syafiq");
 
                 userCloudEndPoint.setValue(event).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -125,6 +126,8 @@ public class EventCreate extends FragmentActivity
                 LatLng selectedLocation = place.getLatLng();
                 lat = selectedLocation.latitude;
                 lon = selectedLocation.longitude;
+                id=place.getId();
+
             }
         }
     }

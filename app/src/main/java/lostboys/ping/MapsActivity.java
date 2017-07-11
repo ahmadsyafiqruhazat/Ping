@@ -3,7 +3,6 @@ package lostboys.ping;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.BitmapDrawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -31,9 +30,15 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceBuffer;
+import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -68,6 +73,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     Button searchBtn;
     EditText addressET;
     PopupWindow changeSortPopUp;
+    GoogleApiClient mGoogleApiClient;
+    Place myPlace;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -259,37 +266,84 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     @Override
     public void onInfoWindowClick(Marker marker) {
 
-            // Inflate the popup_layout.xml
-            RelativeLayout viewGroup = (RelativeLayout) findViewById(R.id.popup);
-            LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            View layout = layoutInflater.inflate(R.layout.popout, viewGroup);
-            RelativeLayout map2 = (RelativeLayout) findViewById(R.id.map2);
-            // Creating the PopupWindow
-            changeSortPopUp = new PopupWindow(this);
-            changeSortPopUp.setContentView(layout);
-            changeSortPopUp.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
-            changeSortPopUp.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
-            changeSortPopUp.setFocusable(true);
+        // Inflate the popup_layout.xml
+        RelativeLayout viewGroup = (RelativeLayout) findViewById(R.id.popup);
+        LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View layout = layoutInflater.inflate(R.layout.popout, viewGroup);
+        RelativeLayout map2 = (RelativeLayout) findViewById(R.id.map2);
+        TextView day,month,time,event,place,loc,par,des,host;
 
-            // Some offset to align the popup a bit to the left, and a bit down, relative to button's position.
-            int OFFSET_X = -20;
-            int OFFSET_Y = 95;
+        day=(TextView) findViewById(R.id.text_view_day);
+        month=(TextView) findViewById(R.id.text_view_month);
+        time=(TextView) findViewById(R.id.text_view_time);
+        event=(TextView) findViewById(R.id.text_view_event);
+        place=(TextView) findViewById(R.id.text_view_location_place);
+        loc=(TextView) findViewById(R.id.text_view_location);
+        des=(TextView) findViewById(R.id.text_view_des);
+        host=(TextView) findViewById(R.id.text_view_host);
+        par=(TextView) findViewById(R.id.text_view_no_par);
+        for(EventEntry temp : mEventEntries) {
+            if (temp.key.equals(marker.getTag())) {
+                day.setText(String.valueOf(temp.pickerMonth));
+                Calendar cal = new GregorianCalendar();
+                cal.set(temp.pickerYear,temp.pickerMonth,temp.pickerDay,temp.pickerHour, temp.pickerMin);
+                long time_num = cal.getTimeInMillis();
+                String formatted = (DateFormat.format("MMM", time_num))
+                        .toString();
+                month.setText(formatted);
+                formatted = (DateFormat.format("HH:mm:ss", time_num))
+                        .toString();
+                time.setText(formatted);
+                event.setText(temp.name);
+                Places.GeoDataApi.getPlaceById(mGoogleApiClient, temp.id)
+                        .setResultCallback(new ResultCallback<PlaceBuffer>() {
+                            @Override
+                            public void onResult(PlaceBuffer places) {
+                                if (places.getStatus().isSuccess() && places.getCount() > 0) {
+                                    myPlace = places.get(0);
+                                    Log.i(LOG_TAG, "Place found: " + myPlace.getName());
+                                } else {
+                                    Log.e(LOG_TAG, "Place not found");
+                                }
+                                places.release();
+                            }
+                        });
+                place.setText(myPlace.getName());
+                loc.setText(myPlace.getAddress());
+                des.setText(temp.des);
+                par.setText(String.valueOf(temp.members.size()));
+                host.setText(temp.usr);
 
-            // Clear the default translucent background
-            //changeSortPopUp.setBackgroundDrawable(new BitmapDrawable());
 
-            // Displaying the popup at the specified location, + offsets.
-            changeSortPopUp.showAtLocation(layout, Gravity.CENTER,0,0);
+            }
+        }
 
-            // Getting a reference to Close button, and close the popup when clicked.
-            Button close = (Button) layout.findViewById(R.id.close);
-            close.setOnClickListener(new View.OnClickListener() {
+        // Creating the PopupWindow
+        changeSortPopUp = new PopupWindow(this);
+        changeSortPopUp.setContentView(layout);
+        changeSortPopUp.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
+        changeSortPopUp.setHeight(LinearLayout.LayoutParams.WRAP_CONTENT);
+        changeSortPopUp.setFocusable(true);
 
-                @Override
-                public void onClick(View v) {
-                    changeSortPopUp.dismiss();
-                }
-            });
+        // Some offset to align the popup a bit to the left, and a bit down, relative to button's position.
+        int OFFSET_X = -20;
+        int OFFSET_Y = 95;
+
+        // Clear the default translucent background
+        //changeSortPopUp.setBackgroundDrawable(new BitmapDrawable());
+
+        // Displaying the popup at the specified location, + offsets.
+        changeSortPopUp.showAtLocation(layout, Gravity.CENTER,0,0);
+
+        // Getting a reference to Close button, and close the popup when clicked.
+        Button close = (Button) layout.findViewById(R.id.close);
+        close.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                changeSortPopUp.dismiss();
+            }
+        });
 
 
     }

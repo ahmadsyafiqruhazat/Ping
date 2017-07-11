@@ -18,20 +18,20 @@
 
     <TextView
         android:id="@+id/text_view_day"
-        android:layout_width="wrap_content"
+        android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginStart="10dp"
         android:fontFamily="sans-serif"
         android:gravity="center_horizontal"
-        android:text="26"
-        android:textColor="#000000"
+        android:text="6"
+        android:textColor="#FFFF"
         android:textSize="48sp"
         android:textStyle="normal"
         android:layout_alignTop="@+id/view_vertical_line"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="10dp" />
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:id="@+id/text_view_event_label"
@@ -48,22 +48,21 @@
 
     <TextView
         android:id="@+id/text_view_month"
-        android:layout_width="wrap_content"
+        android:layout_width="70dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:text="May"
+        android:layout_alignStart="@+id/text_view_day"
         android:layout_below="@+id/text_view_day"
-        android:layout_toStartOf="@+id/view_vertical_line"
-        android:layout_marginEnd="12dp" />
+        android:text="May"
+        android:textAlignment="center" />
 
     <TextView
         android:id="@+id/text_view_time"
-        android:layout_width="wrap_content"
+        android:layout_width="70dp"
         android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/text_view_month"
         android:layout_below="@+id/text_view_month"
-        android:layout_marginTop="12dp"
-        android:layout_toStartOf="@+id/view_vertical_line"
-        android:text="07:00pm"
+        android:text="07:00 AM"
+        android:textAlignment="center"
         android:textAppearance="@android:style/TextAppearance.Material.Body1" />
 
     <TextView

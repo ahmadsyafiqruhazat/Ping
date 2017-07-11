@@ -36,6 +36,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.places.Place;
@@ -67,7 +68,8 @@ import lostboys.ping.Models.EventEntry;
 
 import static lostboys.ping.R.id.map;
 
-public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoWindowClickListener, OnMapReadyCallback {
+public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoWindowClickListener,
+         OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String LOG_TAG = "123";
     private GoogleMap mMap;
@@ -79,8 +81,9 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     EditText addressET;
     PopupWindow changeSortPopUp;
     GoogleApiClient mGoogleApiClient;
-    Place myPlace;
     String text;    // spinner text
+    private static final int GOOGLE_API_CLIENT_ID = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +130,21 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 }
             }
         });
+        mGoogleApiClient = new GoogleApiClient.Builder(MapsActivity.this)
+                .addApi(Places.GEO_DATA_API)
+                .enableAutoManage(this, GOOGLE_API_CLIENT_ID, this)
+                .build();
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.e(LOG_TAG, "Google Places API connection failed with error code: "
+                + connectionResult.getErrorCode());
+
+        Toast.makeText(this,
+                "Google Places API connection failed with error code:" +
+                        connectionResult.getErrorCode(),
+                Toast.LENGTH_LONG).show();
     }
 
     public void updateMap(String address) {          // search engine update
@@ -289,62 +307,16 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         mMap.setOnInfoWindowClickListener(this);
     }
 
+
     @Override
     public void onInfoWindowClick(Marker marker) {
 
         // Inflate the popup_layout.xml
         RelativeLayout viewGroup = (RelativeLayout) findViewById(R.id.popup);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View layout = layoutInflater.inflate(R.layout.popout, viewGroup);
-        RelativeLayout map2 = (RelativeLayout) findViewById(R.id.map2);
-        TextView day,month,time,event,place,loc,par,des,host;
+        final View layout = layoutInflater.inflate(R.layout.popout, viewGroup);
+        final TextView day,month,time,event,par,des,host;
 
-        day=(TextView) findViewById(R.id.text_view_day);
-        month=(TextView) findViewById(R.id.text_view_month);
-        time=(TextView) findViewById(R.id.text_view_time);
-        event=(TextView) findViewById(R.id.text_view_event);
-        place=(TextView) findViewById(R.id.text_view_location_place);
-        loc=(TextView) findViewById(R.id.text_view_location);
-        des=(TextView) findViewById(R.id.text_view_des);
-        host=(TextView) findViewById(R.id.text_view_host);
-        par=(TextView) findViewById(R.id.text_view_no_par);
-        for(EventEntry temp : mEventEntries) {
-            if (temp.key.equals(marker.getTag())) {
-                day.setText(String.valueOf(temp.pickerMonth));
-                Calendar cal = new GregorianCalendar();
-                cal.set(temp.pickerYear,temp.pickerMonth,temp.pickerDay,temp.pickerHour, temp.pickerMin);
-                long time_num = cal.getTimeInMillis();
-                String formatted = (DateFormat.format("MMM", time_num))
-                        .toString();
-                month.setText(formatted);
-                formatted = (DateFormat.format("HH:mm:ss", time_num))
-                        .toString();
-                time.setText(formatted);
-                event.setText(temp.name);
-                Places.GeoDataApi.getPlaceById(mGoogleApiClient, temp.id)
-                        .setResultCallback(new ResultCallback<PlaceBuffer>() {
-                            @Override
-                            public void onResult(PlaceBuffer places) {
-                                if (places.getStatus().isSuccess() && places.getCount() > 0) {
-                                    myPlace = places.get(0);
-                                    Log.i(LOG_TAG, "Place found: " + myPlace.getName());
-                                } else {
-                                    Log.e(LOG_TAG, "Place not found");
-                                }
-                                places.release();
-                            }
-                        });
-                place.setText(myPlace.getName());
-                loc.setText(myPlace.getAddress());
-                des.setText(temp.des);
-                par.setText(String.valueOf(temp.members.size()));
-                host.setText(temp.usr);
-
-
-            }
-        }
-
-        // Creating the PopupWindow
         changeSortPopUp = new PopupWindow(this);
         changeSortPopUp.setContentView(layout);
         changeSortPopUp.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -371,7 +343,54 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
             }
         });
 
+        day=(TextView) layout.findViewById(R.id.text_view_day);
+        month=(TextView) layout.findViewById(R.id.text_view_month);
+        time=(TextView) layout.findViewById(R.id.text_view_time);
+        event=(TextView) layout.findViewById(R.id.text_view_event);
+        des=(TextView) layout.findViewById(R.id.text_view_des);
+        host=(TextView) layout.findViewById(R.id.text_view_host);
+        par=(TextView) layout.findViewById(R.id.text_view_no_par);
+        for(EventEntry temp : mEventEntries) {
+            if (temp.key.equals(marker.getTag())) {
+                day.setText(String.valueOf(temp.pickerDay));
+                //day.setText(String.valueOf(temp.pickerMonth));
+                Calendar cal = new GregorianCalendar();
+                cal.set(temp.pickerYear,temp.pickerMonth,temp.pickerDay,temp.pickerHour, temp.pickerMin);
+                long time_num = cal.getTimeInMillis();
+                String formatted = (DateFormat.format("MMM", time_num))
+                        .toString();
+                month.setText(formatted);
+                formatted = (DateFormat.format("hh:mm a", time_num))
+                        .toString();
+                time.setText(formatted);
+                event.setText(temp.name);
+                Places.GeoDataApi.getPlaceById( mGoogleApiClient, temp.id ) .setResultCallback( new ResultCallback<PlaceBuffer>() {
+                    @Override
+                    public void onResult(PlaceBuffer places) {
+                        if( places.getStatus().isSuccess() ) {
+                            Place myPlace = places.get( 0 );
+                            TextView place=(TextView) layout.findViewById(R.id.text_view_location_place);
+                            TextView loc=(TextView) layout.findViewById(R.id.text_view_location);
+                            place.setText(myPlace.getName());
+                            loc.setText(myPlace.getAddress());
+                        }
 
-          
+                        //Release the PlaceBuffer to prevent a memory leak
+                        places.release();
+                    }
+                } );
+
+                des.setText(temp.des);
+                par.setText(String.valueOf(temp.members.size()));
+                host.setText(temp.usr);
+
+
+            }
+        }
+
+
+
+
+
     }
 }

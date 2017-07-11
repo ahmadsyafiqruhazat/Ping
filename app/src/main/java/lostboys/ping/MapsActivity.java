@@ -14,7 +14,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -420,7 +419,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         mMap.setOnInfoWindowClickListener(this);
     }
 
-
     @Override
     public void onInfoWindowClick(Marker marker) {
 
@@ -496,14 +494,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 des.setText(temp.des);
                 par.setText(String.valueOf(temp.members.size()));
                 host.setText(temp.usr);
-
-
             }
         }
-
-
-
-
-
     }
 }

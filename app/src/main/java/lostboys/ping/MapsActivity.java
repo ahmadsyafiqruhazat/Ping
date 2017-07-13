@@ -13,7 +13,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -23,11 +26,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -99,6 +106,11 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        getSupportActionBar().hide();
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+//                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(map);
@@ -231,6 +243,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         //if you want to update the items at a later time it is recommended to keep it in a variable
         PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(0).withName(R.string.drawer_item_home);
         PrimaryDrawerItem item2 = new PrimaryDrawerItem().withIdentifier(1).withName(R.string.drawer_item_notification);
+        PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_past_events);
+        PrimaryDrawerItem item4 = new PrimaryDrawerItem().withIdentifier(3).withName(R.string.drawer_item_rewards);
         SecondaryDrawerItem item7 = (SecondaryDrawerItem) new SecondaryDrawerItem().withIdentifier(6).withName(R.string.drawer_item_about_us).withIcon(FontAwesome.Icon.faw_info_circle);
         SecondaryDrawerItem item8 = (SecondaryDrawerItem) new SecondaryDrawerItem().withIdentifier(7).withName(R.string.drawer_item_contact_us).withIcon(FontAwesome.Icon.faw_whatsapp);
         SecondaryDrawerItem item9 = (SecondaryDrawerItem) new SecondaryDrawerItem().withIdentifier(8).withName(R.string.drawer_item_feedback).withIcon(FontAwesome.Icon.faw_commenting);
@@ -239,10 +253,11 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         // Create the AccountHeader
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
-                .withHeaderBackground(R.color.colorPrimaryDark)
+                .withHeaderBackground(R.color.md_black_1000)
                 .addProfiles(
                         new ProfileDrawerItem().withName(getResources().getString(R.string.app_name))
                 )
+                .withSelectionListEnabledForSingleProfile(false)
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
                     @Override
                     public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
@@ -256,7 +271,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 .withActivity(this)
                 .withAccountHeader(headerResult)
                 .addDrawerItems(
-                        item1, item2,
+                        item1, item2, item3, item4,
                         new SectionDrawerItem().withName("Extras"),
                         item7, item8, item9, item10
                 )
@@ -271,49 +286,38 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                             case 1: {
                                 break;
                             }
-                            //Login
+                            // View Notifications
                             case 2: {
-
-                                //Login Activity
                                 break;
                             }
 
+                            // View Past Events joined
                             case 3: {
-                                //Third activity
                                 break;
                             }
 
+                            // View Rewards
                             case 4: {
                                 break;
                             }
 
-                            case 5: {
-
-                                break;
-
-                            }
-                            //Location
-                            case 6: {
-
-                                break;
-                            }
                             //About us
-                            case 8: {
+                            case 5: {
                                 break;
                             }
+
                             //Contact Us
-                            case 9: {
-
+                            case 6: {
                                 break;
                             }
+
                             //Feedback
-                            case 10: {
-
+                            case 7: {
                                 break;
                             }
-                            //Settings
-                            case 11:{
 
+                            //Settings
+                            case 8:{
                                 break;
                             }
 
@@ -323,7 +327,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 })
                 .build();
 
-        result.addStickyFooterItem(new PrimaryDrawerItem().withName("Visit us again")); //Adding footer to nav drawer
+//        result.addStickyFooterItem(new PrimaryDrawerItem().withName("Visit us again")); //Adding footer to nav drawer
     }
 
     // Event create button
@@ -333,26 +337,26 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     }
 
     // Drop down menu
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    // menu options including logout
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.logout: {
-                FirebaseAuth.getInstance().signOut();
-                LoginManager.getInstance().logOut();
-                Intent myIntent = new Intent(MapsActivity.this, FacebookLoginActivity.class);
-                startActivity(myIntent);
-            }
-        }
-        return true;
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        MenuInflater menuInflater = getMenuInflater();
+//        menuInflater.inflate(R.menu.menu, menu);
+//        return super.onCreateOptionsMenu(menu);
+//    }
+//
+//    // menu options including logout
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case R.id.logout: {
+//                FirebaseAuth.getInstance().signOut();
+//                LoginManager.getInstance().logOut();
+//                Intent myIntent = new Intent(MapsActivity.this, FacebookLoginActivity.class);
+//                startActivity(myIntent);
+//            }
+//        }
+//        return true;
+//    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -378,7 +382,9 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+//        mMap.setPadding(0,0,0,0);
 //        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
@@ -418,6 +424,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         }
         mMap.setOnInfoWindowClickListener(this);
     }
+
 
     @Override
     public void onInfoWindowClick(Marker marker) {

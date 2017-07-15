@@ -83,6 +83,7 @@ import java.util.List;
 import java.util.Locale;
 
 import lostboys.ping.Models.EventEntry;
+import lostboys.ping.Pickers.Notification;
 
 import static lostboys.ping.R.id.map;
 
@@ -288,6 +289,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                             }
                             // View Notifications
                             case 2: {
+                                Intent myIntent = new Intent(MapsActivity.this, Notification.class);
+                                startActivity(myIntent);
                                 break;
                             }
 

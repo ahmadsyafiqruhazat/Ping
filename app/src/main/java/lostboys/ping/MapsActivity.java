@@ -107,10 +107,9 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        getSupportActionBar().hide();
+//        getSupportActionBar().hide();
 //        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
 //                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -242,14 +241,12 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     // Navigation Drawer
     private void setupNavigationDrawer() {
         //if you want to update the items at a later time it is recommended to keep it in a variable
-        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(0).withName(R.string.drawer_item_home);
         PrimaryDrawerItem item2 = new PrimaryDrawerItem().withIdentifier(1).withName(R.string.drawer_item_notification);
         PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_past_events);
         PrimaryDrawerItem item4 = new PrimaryDrawerItem().withIdentifier(3).withName(R.string.drawer_item_rewards);
-        SecondaryDrawerItem item7 = (SecondaryDrawerItem) new SecondaryDrawerItem().withIdentifier(6).withName(R.string.drawer_item_about_us).withIcon(FontAwesome.Icon.faw_info_circle);
-        SecondaryDrawerItem item8 = (SecondaryDrawerItem) new SecondaryDrawerItem().withIdentifier(7).withName(R.string.drawer_item_contact_us).withIcon(FontAwesome.Icon.faw_whatsapp);
-        SecondaryDrawerItem item9 = (SecondaryDrawerItem) new SecondaryDrawerItem().withIdentifier(8).withName(R.string.drawer_item_feedback).withIcon(FontAwesome.Icon.faw_commenting);
-        SecondaryDrawerItem item10 = (SecondaryDrawerItem) new SecondaryDrawerItem().withIdentifier(9).withName(R.string.drawer_item_settings).withIcon(FontAwesome.Icon.faw_wrench);
+        SecondaryDrawerItem item7 = (SecondaryDrawerItem) new SecondaryDrawerItem().withIdentifier(4).withName(R.string.drawer_item_about_us).withIcon(FontAwesome.Icon.faw_info_circle);
+        SecondaryDrawerItem item8 = (SecondaryDrawerItem) new SecondaryDrawerItem().withIdentifier(5).withName(R.string.drawer_item_feedback).withIcon(FontAwesome.Icon.faw_commenting);
+        SecondaryDrawerItem item9 = (SecondaryDrawerItem) new SecondaryDrawerItem().withIdentifier(6).withName("Logout").withIcon(FontAwesome.Icon.faw_sign_out);
 
         // Create the AccountHeader
         AccountHeader headerResult = new AccountHeaderBuilder()
@@ -272,9 +269,9 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 .withActivity(this)
                 .withAccountHeader(headerResult)
                 .addDrawerItems(
-                        item1, item2, item3, item4,
+                        item2, item3, item4,
                         new SectionDrawerItem().withName("Extras"),
-                        item7, item8, item9, item10
+                        item7, item8, item9
                 )
 
                 //Set onClick options for drawer item click
@@ -283,44 +280,39 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
                         // do something with the clicked item :D
                         switch (position) {
-                            //Home
-                            case 1: {
-                                break;
-                            }
+
                             // View Notifications
-                            case 2: {
+                            case 1: {
                                 Intent myIntent = new Intent(MapsActivity.this, Notification.class);
                                 startActivity(myIntent);
                                 break;
                             }
 
                             // View Past Events joined
-                            case 3: {
+                            case 2: {
                                 break;
                             }
 
                             // View Rewards
-                            case 4: {
+                            case 3: {
                                 break;
                             }
 
                             //About us
-                            case 5: {
-                                break;
-                            }
-
-                            //Contact Us
-                            case 6: {
+                            case 4: {
                                 break;
                             }
 
                             //Feedback
-                            case 7: {
+                            case 5: {
                                 break;
                             }
-
-                            //Settings
-                            case 8:{
+                            // Logout
+                            case 6:{
+                                FirebaseAuth.getInstance().signOut();
+                                LoginManager.getInstance().logOut();
+                                Intent myIntent = new Intent(MapsActivity.this, FacebookLoginActivity.class);
+                                startActivity(myIntent);
                                 break;
                             }
 

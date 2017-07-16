@@ -61,7 +61,7 @@
         -->
         <activity
             android:name=".MapsActivity"
-            android:theme="@style/Theme.AppCompat"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:launchMode="singleTask"/>
         <meta-data
             android:name="com.google.android.gms.version"

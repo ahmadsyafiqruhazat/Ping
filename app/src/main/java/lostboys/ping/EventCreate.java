@@ -9,9 +9,12 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -49,6 +52,7 @@ public class EventCreate extends FragmentActivity
     private String id;
     private int pickerHour,pickerMin,pickerYear,pickerMonth,pickerDay;
     int PLACE_PICKER_REQUEST = 1;
+    String text;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +61,27 @@ public class EventCreate extends FragmentActivity
         name = (EditText)findViewById(R.id.eventName);
         des = (EditText)findViewById(R.id.eventDes);
         submit = (Button)findViewById(R.id.submit);
+
+        // Spinner codes
+        Spinner dynamicSpinner = (Spinner) findViewById(R.id.category_spinner);
+        String[] items = new String[] { "Choose a Category ...","Food", "Party", "Sports", "Music", "Shopping"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, items);
+        dynamicSpinner.setAdapter(adapter);
+        dynamicSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                Log.v("item", (String) parent.getItemAtPosition(position));
+                text = (String) parent.getItemAtPosition(position);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+            }
+        });
+
+
         submit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
@@ -69,7 +94,7 @@ public class EventCreate extends FragmentActivity
                         mFirebaseUser.getUid()).child("events").child(key);
                 ArrayList<String> members = new ArrayList<String>();
                 members.add(mFirebaseUser.getUid());
-                EventEntry event = new EventEntry(name.getText().toString(), pickerHour,pickerMin,
+                EventEntry event = new EventEntry(name.getText().toString(),text, pickerHour,pickerMin,
                         pickerYear,pickerMonth,pickerDay,des.getText().toString(),lat,lon,key, members,id,"Ahmad Syafiq");
 
                 userCloudEndPoint.setValue(event).addOnFailureListener(new OnFailureListener() {

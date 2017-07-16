@@ -1,8 +1,11 @@
 package lostboys.ping;
+
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.facebook.AccessToken;
@@ -10,6 +13,8 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -19,8 +24,19 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Arrays;
+
+import lostboys.ping.Models.Profile;
 
 
 public class FacebookLoginActivity extends AppCompatActivity{
@@ -29,13 +45,16 @@ public class FacebookLoginActivity extends AppCompatActivity{
     private CallbackManager callbackManager;
     private FirebaseAuth firebaseAuth;
     private FirebaseAuth.AuthStateListener firebaseAuthListner;
+    private DatabaseReference mDatabase;
+    private String userName, picID;
+    private  FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_facebooklogin);
-
+        mDatabase =  FirebaseDatabase.getInstance().getReference("users");
         callbackManager = CallbackManager.Factory.create();
 
         loginButton = (LoginButton) findViewById(R.id.login_button);
@@ -45,6 +64,20 @@ public class FacebookLoginActivity extends AppCompatActivity{
             @Override
             public void onSuccess(LoginResult loginResult) {
                 handleFacebookAccessToken(loginResult.getAccessToken());
+                GraphRequest request = GraphRequest.newMeRequest(
+                        loginResult.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+                                Log.v("Main", response.toString());
+                                setProfileToView(object);
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender, birthday");
+                request.setParameters(parameters);
+                request.executeAsync();
 
             }
             @Override
@@ -62,12 +95,63 @@ public class FacebookLoginActivity extends AppCompatActivity{
         firebaseAuthListner = new FirebaseAuth.AuthStateListener(){
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
+                user = firebaseAuth.getCurrentUser();
                 if(user != null){
+                    getCurrentUser();
                     goMainScreen();
                 }
             }
         };
+    }
+    public void getCurrentUser(){
+        Toast.makeText(getApplicationContext(),"loading",Toast.LENGTH_SHORT).show();
+
+        mDatabase.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                            Profile userProfile;
+                            if(dataSnapshot.exists()) {
+                                userProfile = dataSnapshot.child("profile").getValue(Profile.class);
+
+                            }
+                            else{
+                                userProfile = new Profile(userName, picID);
+                                mDatabase.child(user.getUid()).child("profile").setValue(userProfile);
+                                Toast.makeText(getApplicationContext(),"user created",Toast.LENGTH_SHORT).show();
+
+                            }
+                            SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
+                            SharedPreferences.Editor prefsEditor = mPrefs.edit();
+                            Gson gson = new Gson();
+                            String json = gson.toJson(userProfile);
+                            prefsEditor.putString("User", json);
+                            prefsEditor.commit();
+                Toast.makeText(getApplicationContext(),"user loaded",Toast.LENGTH_SHORT).show();
+
+
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void setProfileToView(JSONObject jsonObject) {
+        try {
+            userName = jsonObject.getString("name");
+            picID = jsonObject.getString("id");
+            Toast.makeText(getApplicationContext(),"profile loaded",Toast.LENGTH_SHORT).show();
+
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void handleFacebookAccessToken(AccessToken accessToken) {

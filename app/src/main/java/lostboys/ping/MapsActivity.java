@@ -83,6 +83,8 @@ import java.util.List;
 import java.util.Locale;
 
 import lostboys.ping.Models.EventEntry;
+import lostboys.ping.Pickers.AboutUs;
+import lostboys.ping.Pickers.Feedback;
 import lostboys.ping.Pickers.Notification;
 
 import static lostboys.ping.R.id.map;
@@ -241,12 +243,12 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     // Navigation Drawer
     private void setupNavigationDrawer() {
         //if you want to update the items at a later time it is recommended to keep it in a variable
-        PrimaryDrawerItem item2 = new PrimaryDrawerItem().withIdentifier(1).withName(R.string.drawer_item_notification);
-        PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_past_events);
-        PrimaryDrawerItem item4 = new PrimaryDrawerItem().withIdentifier(3).withName(R.string.drawer_item_rewards);
-        SecondaryDrawerItem item7 = (SecondaryDrawerItem) new SecondaryDrawerItem().withIdentifier(4).withName(R.string.drawer_item_about_us).withIcon(FontAwesome.Icon.faw_info_circle);
-        SecondaryDrawerItem item8 = (SecondaryDrawerItem) new SecondaryDrawerItem().withIdentifier(5).withName(R.string.drawer_item_feedback).withIcon(FontAwesome.Icon.faw_commenting);
-        SecondaryDrawerItem item9 = (SecondaryDrawerItem) new SecondaryDrawerItem().withIdentifier(6).withName("Logout").withIcon(FontAwesome.Icon.faw_sign_out);
+        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(1).withName(R.string.drawer_item_notification);
+        PrimaryDrawerItem item2 = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_past_events);
+        PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIdentifier(3).withName(R.string.drawer_item_rewards);
+        SecondaryDrawerItem item4 = (SecondaryDrawerItem) new SecondaryDrawerItem().withIdentifier(4).withName(R.string.drawer_item_about_us).withIcon(FontAwesome.Icon.faw_info_circle);
+        SecondaryDrawerItem item5 = (SecondaryDrawerItem) new SecondaryDrawerItem().withIdentifier(5).withName(R.string.drawer_item_feedback).withIcon(FontAwesome.Icon.faw_commenting);
+        SecondaryDrawerItem item6 = (SecondaryDrawerItem) new SecondaryDrawerItem().withIdentifier(6).withName("Logout").withIcon(FontAwesome.Icon.faw_sign_out);
 
         // Create the AccountHeader
         AccountHeader headerResult = new AccountHeaderBuilder()
@@ -269,9 +271,9 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 .withActivity(this)
                 .withAccountHeader(headerResult)
                 .addDrawerItems(
-                        item2, item3, item4,
+                        item1, item2, item3,
                         new SectionDrawerItem().withName("Extras"),
-                        item7, item8, item9
+                        item4, item5, item6
                 )
 
                 //Set onClick options for drawer item click
@@ -299,23 +301,26 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                             }
 
                             //About us
-                            case 4: {
+                            case 5: {
+                                Intent myIntent = new Intent(MapsActivity.this, AboutUs.class);
+                                startActivity(myIntent);
                                 break;
                             }
 
                             //Feedback
-                            case 5: {
+                            case 6: {
+                                Intent myIntent = new Intent(MapsActivity.this, Feedback.class);
+                                startActivity(myIntent);
                                 break;
                             }
                             // Logout
-                            case 6:{
+                            case 7:{
                                 FirebaseAuth.getInstance().signOut();
                                 LoginManager.getInstance().logOut();
                                 Intent myIntent = new Intent(MapsActivity.this, FacebookLoginActivity.class);
                                 startActivity(myIntent);
                                 break;
                             }
-
                         }
                         return true;
                     }

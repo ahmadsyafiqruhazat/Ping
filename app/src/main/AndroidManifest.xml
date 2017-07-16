@@ -74,6 +74,12 @@
         <activity
             android:name=".EventCreate"
             android:launchMode="singleInstance"/>
+        <activity
+            android:name=".Pickers.Feedback"
+            android:launchMode="singleInstance" />
+        <activity
+            android:name=".Pickers.AboutUs"
+            android:launchMode="singleInstance"/>
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCUR686kvprHUY1pi3h3E2ZNj7kz3EmsEU"/>

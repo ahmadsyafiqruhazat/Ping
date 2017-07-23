@@ -2,39 +2,34 @@ package lostboys.ping;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -42,6 +37,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -63,6 +59,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.Gson;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -74,6 +71,8 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
+import com.mikepenz.materialdrawer.util.AbstractDrawerImageLoader;
+import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -83,6 +82,7 @@ import java.util.List;
 import java.util.Locale;
 
 import lostboys.ping.Models.EventEntry;
+import lostboys.ping.Models.Profile;
 import lostboys.ping.Pickers.AboutUs;
 import lostboys.ping.Pickers.Feedback;
 import lostboys.ping.Pickers.Notification;
@@ -104,6 +104,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     GoogleApiClient mGoogleApiClient;
     String text;    // spinner text
     private static final int GOOGLE_API_CLIENT_ID = 0;
+    Profile obj;
+    Bitmap pic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +120,10 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 .findFragmentById(map);
         mapFragment.getMapAsync(this);
         populateMap();
-
+        SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = mPrefs.getString("User", "");
+        obj = gson.fromJson(json, Profile.class);
         setupNavigationDrawer();
 
         // Spinner codes
@@ -213,6 +218,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Toast.makeText(getApplicationContext(),"user loaded",Toast.LENGTH_SHORT).show();
+
                 for (DataSnapshot noteSnapshot: dataSnapshot.getChildren()){
                     EventEntry events = noteSnapshot.getValue(EventEntry.class);
                     mEventEntries.add(events);
@@ -253,9 +260,9 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         // Create the AccountHeader
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
-                .withHeaderBackground(R.color.md_black_1000)
+                .withHeaderBackground(R.color.yellow)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(getResources().getString(R.string.app_name))
+                        new ProfileDrawerItem().withName("Ahmad Syafiq").withIcon("https://graph.facebook.com/447679082258221/picture?type=small")
                 )
                 .withSelectionListEnabledForSingleProfile(false)
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
@@ -292,6 +299,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 
                             // View Past Events joined
                             case 2: {
+                                Intent myIntent = new Intent(MapsActivity.this, Joined.class);
+                               startActivity(myIntent);
                                 break;
                             }
 
@@ -326,6 +335,35 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                     }
                 })
                 .build();
+        DrawerImageLoader.init(new AbstractDrawerImageLoader() {
+            @Override
+            public void set(ImageView imageView, Uri uri, Drawable placeholder) {
+                Glide.with(imageView.getContext()).load(uri).placeholder(placeholder).into(imageView);
+            }
+
+            @Override
+            public void cancel(ImageView imageView) {
+                Glide.clear(imageView);
+            }
+
+//            @Override
+//            public Drawable placeholder(Context ctx, String tag) {
+//                if (DrawerImageLoader.Tags.PROFILE.name().equals(tag)) {
+//                    return DrawerUIUtils.getPlaceHolder(ctx);
+//                } else if (DrawerImageLoader.Tags.ACCOUNT_HEADER.name().equals(tag)) {
+//                    return new IconicsDrawable(ctx).iconText(" ").backgroundColorRes(com.mikepenz.materialdrawer.R.color.primary).sizeDp(56);
+//                } else if ("customUrlItem".equals(tag)) {
+//                    return new IconicsDrawable(ctx).iconText(" ").backgroundColorRes(R.color.md_red_500).sizeDp(56);
+//                }
+//
+//                //we use the default one for
+//                //DrawerImageLoader.Tags.PROFILE_DRAWER_ITEM.name()
+//
+//                return super.placeholder(ctx, tag);
+//            }
+
+    });
+
 
 //        result.addStickyFooterItem(new PrimaryDrawerItem().withName("Visit us again")); //Adding footer to nav drawer
     }
@@ -504,4 +542,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
             }
         }
     }
+
+
+
 }

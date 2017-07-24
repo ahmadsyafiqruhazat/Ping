@@ -246,7 +246,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 .withActivity(this)
                 .withHeaderBackground(R.color.yellow)
                 .addProfiles(
-                        new ProfileDrawerItem().withName(obj.userName).withIcon("https://graph.facebook.com/"+obj.picID+"/picture?type=small")
+                        new ProfileDrawerItem().withName(obj.userName).withIcon("https://graph.facebook.com/"+obj.picID+"/picture?type=medium")
                 )
                 .withSelectionListEnabledForSingleProfile(false)
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {

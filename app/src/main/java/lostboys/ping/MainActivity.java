@@ -20,6 +20,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+
+import lostboys.ping.Models.EventEntry;
 import lostboys.ping.Models.Profile;
 
 public class MainActivity extends Activity {
@@ -34,11 +37,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_main);
-        ProfilePictureView profilePictureView;
 
-        profilePictureView = (ProfilePictureView) findViewById(R.id.friendProfilePicture);
 
-        profilePictureView.setProfileId("447679082258221");
+
         mDatabase =  FirebaseDatabase.getInstance().getReference("users");
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -65,13 +66,26 @@ public class MainActivity extends Activity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 Profile userProfile;
-                userProfile = dataSnapshot.child(user.getUid()).getValue(Profile.class);
+                String userName = (String) dataSnapshot.child(user.getUid()).child("profile").child("userName").getValue();
+                String picID = (String) dataSnapshot.child(user.getUid()).child("profile").child("picID").getValue();
+                ArrayList<EventEntry> eventsJoined= new ArrayList<EventEntry>();
+                for(DataSnapshot eventsJ : dataSnapshot.child("eventsJoined").getChildren()){
+                    eventsJoined.add(eventsJ.getValue(EventEntry.class));
+                }
+                ArrayList<EventEntry> eventsCreated= new ArrayList<EventEntry>();
+                for(DataSnapshot eventsJ : dataSnapshot.child("eventsCreated").getChildren()){
+                    eventsCreated.add(eventsJ.getValue(EventEntry.class));
+                }
+                userProfile=new Profile(userName,picID,eventsCreated,eventsJoined);
                 SharedPreferences mPrefs = getSharedPreferences("myPrefs",MODE_PRIVATE);
                 SharedPreferences.Editor prefsEditor = mPrefs.edit();
                 Gson gson = new Gson();
                 String json = gson.toJson(userProfile);
                 prefsEditor.putString("User", json);
                 prefsEditor.commit();
+                ProfilePictureView profilePictureView = (ProfilePictureView) findViewById(R.id.friendProfilePicture);
+
+                profilePictureView.setProfileId(userProfile.picID);
 
                 Toast.makeText(getApplicationContext(),userProfile.userName,Toast.LENGTH_SHORT).show();
                 goMap();

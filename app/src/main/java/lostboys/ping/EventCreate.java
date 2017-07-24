@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
@@ -28,10 +29,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
 
 import lostboys.ping.Models.EventEntry;
+import lostboys.ping.Models.Profile;
 import lostboys.ping.Pickers.DatePickerFragment;
 import lostboys.ping.Pickers.TimePickerFragment;
 
@@ -54,13 +57,17 @@ public class EventCreate extends FragmentActivity
     private int pickerHour,pickerMin,pickerYear,pickerMonth,pickerDay;
     int PLACE_PICKER_REQUEST = 1;
     String text;
-
+    Profile obj;
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_createevent);
+        SharedPreferences mPrefs = getSharedPreferences("myPrefs",MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = mPrefs.getString("User", "");
 
+        obj = gson.fromJson(json, Profile.class);
         name = (EditText)findViewById(R.id.eventName);
         des = (EditText)findViewById(R.id.eventDes);
         submit = (Button)findViewById(R.id.submit);
@@ -100,7 +107,7 @@ public class EventCreate extends FragmentActivity
                 ArrayList<String> members = new ArrayList<String>();
                 members.add(mFirebaseUser.getUid());
                 EventEntry event = new EventEntry(name.getText().toString(),text, pickerHour,pickerMin,
-                        pickerYear,pickerMonth,pickerDay,des.getText().toString(),lat,lon,key, members,id,"Ahmad Syafiq",loc,add);
+                        pickerYear,pickerMonth,pickerDay,des.getText().toString(),lat,lon,key, members,id,obj.userName,loc,add);
 
                 userCloudEndPoint.setValue(event).addOnFailureListener(new OnFailureListener() {
                     @Override

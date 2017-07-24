@@ -455,7 +455,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         RelativeLayout viewGroup = (RelativeLayout) findViewById(R.id.popup);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View layout = layoutInflater.inflate(R.layout.popout, viewGroup);
-        final TextView day,month,time,event,par,des,host;
+        final TextView day,month,time,eventName,par,des,host;
         EventEntry tempEvent= new EventEntry();
         changeSortPopUp = new PopupWindow(this);
         changeSortPopUp.setContentView(layout);
@@ -488,7 +488,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         day=(TextView) layout.findViewById(R.id.text_view_day);
         month=(TextView) layout.findViewById(R.id.text_view_month);
         time=(TextView) layout.findViewById(R.id.text_view_time);
-        event=(TextView) layout.findViewById(R.id.text_view_event);
+        eventName=(TextView) layout.findViewById(R.id.text_view_event);
         des=(TextView) layout.findViewById(R.id.text_view_des);
         host=(TextView) layout.findViewById(R.id.text_view_host);
         par=(TextView) layout.findViewById(R.id.text_view_no_par);
@@ -505,7 +505,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 formatted = (DateFormat.format("hh:mm a", time_num))
                         .toString();
                 time.setText(formatted);
-                event.setText(temp.name);
+                eventName.setText(temp.name);
 
                 TextView place=(TextView) layout.findViewById(R.id.text_view_location_place);
                 TextView loc=(TextView) layout.findViewById(R.id.text_view_location);

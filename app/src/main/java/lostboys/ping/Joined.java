@@ -22,46 +22,45 @@ import lostboys.ping.Models.Profile;
 
 public class Joined extends AppCompatActivity {
     DatabaseReference mDatabase;
-//    Profile obj;
+    //    Profile obj;
     ArrayList<EventEntry> events = new ArrayList<>();
     private FirebaseUser user;
     private FirebaseAuth firebaseAuth;
     Profile obj;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_joined_events);
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
-        mDatabase =  FirebaseDatabase.getInstance().getReference("users").child(user.getUid()).child("profile").child("eventsJoined");
+        mDatabase = FirebaseDatabase.getInstance().getReference("users").child(user.getUid()).child("profile").child("eventsJoined");
 
         mDatabase.addValueEventListener(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Toast.makeText(getApplicationContext(),"user loaded",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "user loaded", Toast.LENGTH_SHORT).show();
 
-                for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     EventEntry post = postSnapshot.getValue(EventEntry.class);
                     events.add(post);
+                    RecyclerView rv = (RecyclerView) findViewById(R.id.rv);
+                    LinearLayoutManager llm = new LinearLayoutManager(Joined.this);
+                    rv.setLayoutManager(llm);
+
+                    RVAdapter adapter = new RVAdapter(events);
+                    rv.setAdapter(adapter);
+
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(),"error",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
 
             }
         });
-        RecyclerView rv = (RecyclerView)findViewById(R.id.rv);
-        LinearLayoutManager llm = new LinearLayoutManager(this);
-        rv.setLayoutManager(llm);
-
-        RVAdapter adapter = new RVAdapter(events);
-        rv.setAdapter(adapter);
 
     }
-
-
-
 }

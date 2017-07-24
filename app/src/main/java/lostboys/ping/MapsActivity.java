@@ -251,8 +251,28 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                             .title(event.name)
                             .snippet(formatted+",with "+String.valueOf(size)+" joining.")
                             .icon(BitmapDescriptorFactory.defaultMarker(20))
-                            .alpha(0.6f));
+                            .alpha(1f));
                     mMarker.setTag(event.key);
+                    switch (event.category){
+                        case "Food":
+                            mMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.food));
+                            break;
+                        case "Party":
+                            mMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.party));
+                            break;
+                        case "Sports":
+                            mMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sports));
+                            break;
+                        case "Music":
+                            mMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.music));
+                            break;
+                        case "Shopping":
+                            mMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.shopping));
+                            break;
+                        default:
+                            break;
+                    }
+
                 }
             }
             @Override

@@ -80,7 +80,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
             personViewHolder.des.setText(events.get(i).des);
             personViewHolder.par.setText(String.valueOf(events.get(i).members.size()));
             personViewHolder.host.setText(events.get(i).usr);
-            Toast.makeText(getApplicationContext(),"events loaded",Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getApplicationContext(),"events loaded",Toast.LENGTH_SHORT).show();
             personViewHolder.loc.setText(events.get(i).add);
             personViewHolder.place.setText(events.get(i).loc);
         }

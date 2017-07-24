@@ -13,6 +13,6 @@ public class Notification extends Activity{
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.notification);
+        setContentView(R.layout.event_card);
     }
 }

@@ -40,7 +40,7 @@ public class Joined extends AppCompatActivity {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Toast.makeText(getApplicationContext(), "user loaded", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplicationContext(), "user loaded", Toast.LENGTH_SHORT).show();
 
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     EventEntry post = postSnapshot.getValue(EventEntry.class);

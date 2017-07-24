@@ -34,8 +34,10 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
+import lostboys.ping.Models.EventEntry;
 import lostboys.ping.Models.Profile;
 
 
@@ -105,14 +107,24 @@ public class FacebookLoginActivity extends AppCompatActivity{
     public void getCurrentUser(){
         Toast.makeText(getApplicationContext(),"loading",Toast.LENGTH_SHORT).show();
 
-        mDatabase.child(user.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                             Profile userProfile;
                             if(dataSnapshot.exists()) {
-                                userProfile = dataSnapshot.child("profile").getValue(Profile.class);
-                                Toast.makeText(getApplicationContext(),userProfile.userName,Toast.LENGTH_SHORT).show();
+
+                                String userName = (String) dataSnapshot.child(user.getUid()).child("profile").child("userName").getValue();
+                                String picID = (String) dataSnapshot.child(user.getUid()).child("profile").child("picID").getValue();
+                                ArrayList<EventEntry> eventsJoined= new ArrayList<EventEntry>();
+                                for(DataSnapshot eventsJ : dataSnapshot.child("eventsJoined").getChildren()){
+                                    eventsJoined.add(eventsJ.getValue(EventEntry.class));
+                                }
+                                ArrayList<EventEntry> eventsCreated= new ArrayList<EventEntry>();
+                                for(DataSnapshot eventsJ : dataSnapshot.child("eventsCreated").getChildren()){
+                                    eventsCreated.add(eventsJ.getValue(EventEntry.class));
+                                }
+                                userProfile=new Profile(userName,picID,eventsCreated,eventsJoined);
                             }
                             else{
                                 userProfile = new Profile(userName, picID);

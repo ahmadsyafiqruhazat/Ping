@@ -14,6 +14,8 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_toEndOf="@+id/text_view_day"
+        android:textColor="#FFFF"
+
         android:background="#979797" />
 
     <TextView
@@ -42,7 +44,7 @@
         android:layout_toEndOf="@+id/view_vertical_line"
         android:fontFamily="sans-serif"
         android:text="Event"
-        android:textColor="#7e7b7b"
+        android:textColor="@color/material_drawer_dark_primary_icon"
         android:textSize="14sp"
         android:textStyle="normal" />
 
@@ -52,6 +54,8 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/text_view_day"
         android:layout_below="@+id/text_view_day"
+        android:textColor="#FFFF"
+
         android:text="May"
         android:textAlignment="center" />
 
@@ -61,6 +65,8 @@
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/text_view_month"
         android:layout_below="@+id/text_view_month"
+        android:textColor="#FFFF"
+
         android:text="07:00 AM"
         android:textAlignment="center"
         android:textAppearance="@android:style/TextAppearance.Material.Body1" />
@@ -70,6 +76,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Soccer"
+        android:textColor="#FFFF"
+
         android:textAppearance="@android:style/TextAppearance.Material.Body1"
         android:layout_below="@+id/text_view_event_label"
         android:layout_toEndOf="@+id/view_vertical_line" />
@@ -78,6 +86,8 @@
         android:id="@+id/text_view_location_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/material_drawer_dark_primary_icon"
+
         android:layout_below="@+id/text_view_event"
         android:layout_toEndOf="@+id/view_vertical_line"
         android:text="Location" />
@@ -86,6 +96,8 @@
         android:id="@+id/text_view_location_place"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="#FFFF"
+
         android:layout_below="@+id/text_view_location_label"
         android:layout_toEndOf="@+id/view_vertical_line"
         android:text="Soccer Court"
@@ -95,6 +107,8 @@
         android:id="@+id/text_view_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="#FFFF"
+
         android:text="Blk 232 Pasir Ris"
         android:textStyle="italic"
         android:layout_below="@+id/text_view_location_place"
@@ -105,6 +119,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/text_view_location"
+        android:textColor="@color/material_drawer_dark_primary_icon"
+
         android:layout_toEndOf="@+id/view_vertical_line"
         android:text="No. Of Participants" />
 
@@ -112,6 +128,8 @@
         android:id="@+id/text_view_no_par"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="#FFFF"
+
         android:layout_below="@+id/text_view_no_par_label"
         android:layout_toEndOf="@+id/view_vertical_line"
         android:text="10"
@@ -122,6 +140,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/text_view_no_par"
+        android:textColor="@color/material_drawer_dark_primary_icon"
+
         android:layout_toEndOf="@+id/view_vertical_line"
         android:text="Details" />
 
@@ -130,6 +150,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/text_view_des_label"
+        android:textColor="#FFFF"
+
         android:layout_toEndOf="@+id/view_vertical_line"
         android:text="Open jio soccer 5v5"
         android:textAppearance="@android:style/TextAppearance.Material.Body1" />
@@ -137,6 +159,8 @@
     <TextView
         android:id="@+id/text_view_host_label"
         android:layout_width="wrap_content"
+        android:textColor="@color/material_drawer_dark_primary_icon"
+
         android:layout_height="wrap_content"
         android:layout_below="@+id/text_view_des"
         android:layout_toEndOf="@+id/view_vertical_line"
@@ -145,6 +169,8 @@
     <TextView
         android:id="@+id/text_view_host"
         android:layout_width="wrap_content"
+        android:textColor="#FFFF"
+
         android:layout_height="wrap_content"
         android:layout_below="@+id/text_view_host_label"
         android:layout_toEndOf="@+id/view_vertical_line"
@@ -158,6 +184,8 @@
         android:layout_alignParentTop="true"
         android:layout_marginEnd="5dp"
         android:layout_marginTop="5dp"
+        android:textColor="#FFFF"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Close" />
@@ -166,6 +194,8 @@
         android:id="@+id/join"
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
+        android:textColor="#FFFF"
+
         android:layout_height="wrap_content"
         android:text="Join"
         android:layout_alignBottom="@+id/text_view_host"

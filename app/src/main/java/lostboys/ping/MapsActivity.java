@@ -409,6 +409,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         startActivity(intent);
     }
 
+
+
     // Drop down menu
 //    @Override
 //    public boolean onCreateOptionsMenu(Menu menu) {
@@ -463,7 +465,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
             @Override
             public void onLocationChanged(Location location) {
                 LatLng userLocation = new LatLng(location.getLatitude(), location.getLongitude());
-                mMap.clear();
                 mMap.addMarker(new MarkerOptions().position(userLocation).title("Your Location"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
@@ -493,8 +494,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                // mMap.addMarker(new MarkerOptions().position(userLocation).title("Your Location"));
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-            }
-        }
+            }}
+
         mMap.setOnInfoWindowClickListener(this);
     }
 

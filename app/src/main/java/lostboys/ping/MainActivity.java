@@ -83,6 +83,7 @@ public class MainActivity extends Activity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+                goMap();
 
             }
         });

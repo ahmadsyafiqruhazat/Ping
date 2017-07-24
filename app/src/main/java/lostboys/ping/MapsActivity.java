@@ -120,6 +120,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         String json = mPrefs.getString("User", "");
 
         obj = gson.fromJson(json, Profile.class);
+
         setupNavigationDrawer();
 
         // Spinner codes
@@ -202,7 +203,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         mDatabase.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Toast.makeText(getApplicationContext(),"user loaded",Toast.LENGTH_SHORT).show();
 
                 for (DataSnapshot noteSnapshot: dataSnapshot.getChildren()){
                     EventEntry events = noteSnapshot.getValue(EventEntry.class);

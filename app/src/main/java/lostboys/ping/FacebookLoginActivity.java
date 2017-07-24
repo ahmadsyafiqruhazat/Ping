@@ -112,7 +112,7 @@ public class FacebookLoginActivity extends AppCompatActivity{
                             Profile userProfile;
                             if(dataSnapshot.exists()) {
                                 userProfile = dataSnapshot.child("profile").getValue(Profile.class);
-                                Toast.makeText(getApplicationContext(),"user loaded",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(),userProfile.userName,Toast.LENGTH_SHORT).show();
                             }
                             else{
                                 userProfile = new Profile(userName, picID);

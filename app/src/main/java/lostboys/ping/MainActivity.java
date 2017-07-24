@@ -65,7 +65,7 @@ public class MainActivity extends Activity {
             public void onDataChange(DataSnapshot dataSnapshot) {
 
                 Profile userProfile;
-                userProfile = dataSnapshot.child(user.getUid()).child("profile").getValue(Profile.class);
+                userProfile = dataSnapshot.child(user.getUid()).getValue(Profile.class);
                 SharedPreferences mPrefs = getSharedPreferences("myPrefs",MODE_PRIVATE);
                 SharedPreferences.Editor prefsEditor = mPrefs.edit();
                 Gson gson = new Gson();
@@ -73,7 +73,7 @@ public class MainActivity extends Activity {
                 prefsEditor.putString("User", json);
                 prefsEditor.commit();
 
-                Toast.makeText(getApplicationContext(),"user loaded",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),userProfile.userName,Toast.LENGTH_SHORT).show();
                 goMap();
 
 
@@ -83,7 +83,6 @@ public class MainActivity extends Activity {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                goMap();
 
             }
         });

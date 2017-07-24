@@ -7,12 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceBuffer;
-import com.google.android.gms.location.places.Places;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -20,16 +15,20 @@ import java.util.GregorianCalendar;
 
 import lostboys.ping.Models.EventEntry;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 /**
  * Created by Syafiq on 23/7/2017.
  */
 
 public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
-    GoogleApiClient mGoogleApiClient;
+
+
 
     public static class PersonViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
         TextView day,month,time,event,par,des,host,place,loc;
+
 
         PersonViewHolder(View itemView) {
             super(itemView);
@@ -65,10 +64,8 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
 
         @Override
         public void onBindViewHolder(PersonViewHolder personViewHolder, int i) {
-            final String[] name = new String[1];
-            final String[] add = new String[1];
+
             personViewHolder.day.setText(String.valueOf(events.get(i).pickerDay));
-            //day.setText(String.valueOf(events.get(i).pickerMonth));
             Calendar cal = new GregorianCalendar();
             cal.set(events.get(i).pickerYear,events.get(i).pickerMonth,events.get(i).pickerDay,events.get(i).pickerHour, events.get(i).pickerMin);
             long time_num = cal.getTimeInMillis();
@@ -79,25 +76,13 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
                     .toString();
             personViewHolder.time.setText(formatted);
             personViewHolder.event.setText(events.get(i).name);
-            Places.GeoDataApi.getPlaceById( mGoogleApiClient, events.get(i).id ) .setResultCallback(new ResultCallback<PlaceBuffer>() {
-                @Override
-                public void onResult(PlaceBuffer places) {
-                    if( places.getStatus().isSuccess() ) {
-                        Place myPlace = places.get( 0 );
-                        name[0] = (String) myPlace.getName();
-                        add[0] = (String) myPlace.getAddress();
 
-                    }
-
-                    //Release the PlaceBuffer to prevent a memory leak
-                    places.release();
-                }
-            } );
-            personViewHolder.place.setText(name[0]);
-            personViewHolder.loc.setText(add[0]);
             personViewHolder.des.setText(events.get(i).des);
             personViewHolder.par.setText(String.valueOf(events.get(i).members.size()));
             personViewHolder.host.setText(events.get(i).usr);
+            Toast.makeText(getApplicationContext(),"events loaded",Toast.LENGTH_SHORT).show();
+            personViewHolder.loc.setText(events.get(i).add);
+            personViewHolder.place.setText(events.get(i).loc);
         }
 
         @Override

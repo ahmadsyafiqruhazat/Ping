@@ -98,7 +98,6 @@ public class FacebookLoginActivity extends AppCompatActivity{
                 user = firebaseAuth.getCurrentUser();
                 if(user != null){
                     getCurrentUser();
-                    goMainScreen();
                 }
             }
         };
@@ -113,7 +112,7 @@ public class FacebookLoginActivity extends AppCompatActivity{
                             Profile userProfile;
                             if(dataSnapshot.exists()) {
                                 userProfile = dataSnapshot.child("profile").getValue(Profile.class);
-
+                                Toast.makeText(getApplicationContext(),"user loaded",Toast.LENGTH_SHORT).show();
                             }
                             else{
                                 userProfile = new Profile(userName, picID);
@@ -121,13 +120,15 @@ public class FacebookLoginActivity extends AppCompatActivity{
                                 Toast.makeText(getApplicationContext(),"user created",Toast.LENGTH_SHORT).show();
 
                             }
-                            SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
+                            SharedPreferences mPrefs = getSharedPreferences("myPrefs",MODE_PRIVATE);
                             SharedPreferences.Editor prefsEditor = mPrefs.edit();
                             Gson gson = new Gson();
                             String json = gson.toJson(userProfile);
                             prefsEditor.putString("User", json);
                             prefsEditor.commit();
-                Toast.makeText(getApplicationContext(),"user loaded",Toast.LENGTH_SHORT).show();
+                            goMainScreen();
+
+
 
 
 

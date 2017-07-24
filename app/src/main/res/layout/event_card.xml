@@ -14,7 +14,7 @@
     <RelativeLayout
         android:id="@+id/popup"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="0dp">
 
         <View
@@ -41,7 +41,6 @@
             android:fontFamily="sans-serif"
             android:gravity="center_horizontal"
             android:text="6"
-            android:textColor="#FFFF"
             android:textSize="48sp"
             android:textStyle="normal" />
 

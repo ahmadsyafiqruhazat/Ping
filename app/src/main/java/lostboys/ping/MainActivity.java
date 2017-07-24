@@ -20,9 +20,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
-
-import lostboys.ping.Models.EventEntry;
 import lostboys.ping.Models.Profile;
 
 public class MainActivity extends Activity {
@@ -49,9 +46,8 @@ public class MainActivity extends Activity {
                 if (user == null) {
 
                     goLoginScreen();
-                } else {
+                }  else {
                     getCurrentUser();
-                    goMap();
 
                 }
     }
@@ -67,16 +63,9 @@ public class MainActivity extends Activity {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Toast.makeText(getApplicationContext(),"user loaded",Toast.LENGTH_SHORT).show();
 
                 Profile userProfile;
-                userProfile = dataSnapshot.child(user.getUid()).child("events").getValue(Profile.class);
-                ArrayList<EventEntry> events = new ArrayList<>();
-                for (DataSnapshot postSnapshot: dataSnapshot.child(user.getUid()).getChildren()) {
-                    EventEntry post = postSnapshot.getValue(EventEntry.class);
-                    events.add(post);
-                }
-                userProfile.eventsJoined=events;
+                userProfile = dataSnapshot.child(user.getUid()).child("profile").getValue(Profile.class);
                 SharedPreferences mPrefs = getSharedPreferences("myPrefs",MODE_PRIVATE);
                 SharedPreferences.Editor prefsEditor = mPrefs.edit();
                 Gson gson = new Gson();
@@ -91,12 +80,19 @@ public class MainActivity extends Activity {
 
             }
 
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(),"error",Toast.LENGTH_SHORT).show();
+                goMap();
 
             }
         });
+    }
+
+    @Override
+    protected void onRestart() {
+        goMap();
+        super.onRestart();
     }
 
     private void goMap() {

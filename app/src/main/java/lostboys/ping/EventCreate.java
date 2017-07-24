@@ -40,19 +40,22 @@ import lostboys.ping.Pickers.TimePickerFragment;
  */
 
 public class EventCreate extends FragmentActivity
-        implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener {
+        implements TimePickerDialog.OnTimeSetListener, DatePickerDialog.OnDateSetListener{
     private DatabaseReference mDatabase;
     private DatabaseReference userCloudEndPoint;
+    private DatabaseReference userCloudEndPoint2;
     private DatabaseReference eventCloudEndPoint;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseUser mFirebaseUser;
     private EditText name,des;
     private Button submit;
     private double lon,lat;
-    private String id;
+    private String id,loc,add;
     private int pickerHour,pickerMin,pickerYear,pickerMonth,pickerDay;
     int PLACE_PICKER_REQUEST = 1;
     String text;
+
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,13 +94,21 @@ public class EventCreate extends FragmentActivity
                 eventCloudEndPoint = FirebaseDatabase.getInstance().getReference("events");
                 String key = eventCloudEndPoint.push().getKey();
                 userCloudEndPoint =  mDatabase.child(
-                        mFirebaseUser.getUid()).child("events").child(key);
+                        mFirebaseUser.getUid()).child("profile").child("eventsCreated").child(key);
+                userCloudEndPoint2 =  mDatabase.child(
+                        mFirebaseUser.getUid()).child("profile").child("eventsJoined").child(key);
                 ArrayList<String> members = new ArrayList<String>();
                 members.add(mFirebaseUser.getUid());
                 EventEntry event = new EventEntry(name.getText().toString(),text, pickerHour,pickerMin,
-                        pickerYear,pickerMonth,pickerDay,des.getText().toString(),lat,lon,key, members,id,"Ahmad Syafiq");
+                        pickerYear,pickerMonth,pickerDay,des.getText().toString(),lat,lon,key, members,id,"Ahmad Syafiq",loc,add);
 
                 userCloudEndPoint.setValue(event).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("event", e.getLocalizedMessage());
+                    }
+                });
+                userCloudEndPoint2.setValue(event).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d("event", e.getLocalizedMessage());
@@ -113,6 +124,7 @@ public class EventCreate extends FragmentActivity
             }
         });
     }
+
 
     public void showTimePickerDialog(View v) {
         TimePickerFragment newFragment = new TimePickerFragment();
@@ -149,6 +161,8 @@ public class EventCreate extends FragmentActivity
                 String toastMsg = String.format("Place: %s", place.getName());
                 Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
                 LatLng selectedLocation = place.getLatLng();
+                loc= (String) place.getName();
+                add= (String) place.getAddress();
                 lat = selectedLocation.latitude;
                 lon = selectedLocation.longitude;
                 id=place.getId();

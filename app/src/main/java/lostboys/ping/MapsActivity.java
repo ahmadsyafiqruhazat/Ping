@@ -39,12 +39,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.facebook.login.LoginManager;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceBuffer;
-import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -54,6 +48,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -90,7 +85,7 @@ import lostboys.ping.Pickers.Notification;
 import static lostboys.ping.R.id.map;
 
 public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoWindowClickListener,
-         OnMapReadyCallback, GoogleApiClient.OnConnectionFailedListener {
+         OnMapReadyCallback {
 
     private static final String LOG_TAG = "123";
     private GoogleMap mMap;
@@ -101,9 +96,9 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     Button searchBtn;
     EditText addressET;
     PopupWindow changeSortPopUp;
-    GoogleApiClient mGoogleApiClient;
+
     String text;    // spinner text
-    private static final int GOOGLE_API_CLIENT_ID = 0;
+
     Profile obj;
     Bitmap pic;
 
@@ -120,9 +115,10 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 .findFragmentById(map);
         mapFragment.getMapAsync(this);
         populateMap();
-        SharedPreferences mPrefs = getPreferences(MODE_PRIVATE);
+        SharedPreferences mPrefs = getSharedPreferences("myPrefs",MODE_PRIVATE);
         Gson gson = new Gson();
         String json = mPrefs.getString("User", "");
+
         obj = gson.fromJson(json, Profile.class);
         setupNavigationDrawer();
 
@@ -161,22 +157,10 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 }
             }
         });
-        mGoogleApiClient = new GoogleApiClient.Builder(MapsActivity.this)
-                .addApi(Places.GEO_DATA_API)
-                .enableAutoManage(this, GOOGLE_API_CLIENT_ID, this)
-                .build();
+
     }
 
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
-        Log.e(LOG_TAG, "Google Places API connection failed with error code: "
-                + connectionResult.getErrorCode());
 
-        Toast.makeText(this,
-                "Google Places API connection failed with error code:" +
-                        connectionResult.getErrorCode(),
-                Toast.LENGTH_LONG).show();
-    }
 
     public void updateMap(String address) {          // search engine update
         mMap.clear();
@@ -262,7 +246,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 .withActivity(this)
                 .withHeaderBackground(R.color.yellow)
                 .addProfiles(
-                        new ProfileDrawerItem().withName("Ahmad Syafiq").withIcon("https://graph.facebook.com/447679082258221/picture?type=small")
+                        new ProfileDrawerItem().withName(obj.userName).withIcon("https://graph.facebook.com/"+obj.picID+"/picture?type=small")
                 )
                 .withSelectionListEnabledForSingleProfile(false)
                 .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
@@ -472,7 +456,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View layout = layoutInflater.inflate(R.layout.popout, viewGroup);
         final TextView day,month,time,event,par,des,host;
-
+        EventEntry tempEvent= new EventEntry();
         changeSortPopUp = new PopupWindow(this);
         changeSortPopUp.setContentView(layout);
         changeSortPopUp.setWidth(LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -498,7 +482,9 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 changeSortPopUp.dismiss();
             }
         });
-
+        Button join = (Button) layout.findViewById(R.id.join);
+        FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
+        final FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
         day=(TextView) layout.findViewById(R.id.text_view_day);
         month=(TextView) layout.findViewById(R.id.text_view_month);
         time=(TextView) layout.findViewById(R.id.text_view_time);
@@ -520,27 +506,33 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                         .toString();
                 time.setText(formatted);
                 event.setText(temp.name);
-                Places.GeoDataApi.getPlaceById( mGoogleApiClient, temp.id ) .setResultCallback( new ResultCallback<PlaceBuffer>() {
-                    @Override
-                    public void onResult(PlaceBuffer places) {
-                        if( places.getStatus().isSuccess() ) {
-                            Place myPlace = places.get( 0 );
-                            TextView place=(TextView) layout.findViewById(R.id.text_view_location_place);
-                            TextView loc=(TextView) layout.findViewById(R.id.text_view_location);
-                            place.setText(myPlace.getName());
-                            loc.setText(myPlace.getAddress());
-                        }
 
-                        //Release the PlaceBuffer to prevent a memory leak
-                        places.release();
-                    }
-                } );
-
+                TextView place=(TextView) layout.findViewById(R.id.text_view_location_place);
+                TextView loc=(TextView) layout.findViewById(R.id.text_view_location);
+                place.setText(temp.loc);
+                loc.setText(temp.add);
                 des.setText(temp.des);
                 par.setText(String.valueOf(temp.members.size()));
                 host.setText(temp.usr);
+                temp.members.add(mFirebaseUser.getUid());
+                tempEvent=temp;
             }
         }
+        final EventEntry finalTempEvent = tempEvent;
+        join.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                DatabaseReference mDatabase =  FirebaseDatabase.getInstance().getReference("users").child(mFirebaseUser.getUid()).child("profile").child("eventsJoined").child(finalTempEvent.key);
+                DatabaseReference mDatabase2 =  FirebaseDatabase.getInstance().getReference("events").child(finalTempEvent.key).child("members");
+                mDatabase.setValue(finalTempEvent);
+                mDatabase2.setValue(finalTempEvent.members);
+                Toast.makeText(getApplicationContext(),"Event Joined",Toast.LENGTH_SHORT).show();
+                changeSortPopUp.dismiss();
+
+            }
+        });
     }
 
 

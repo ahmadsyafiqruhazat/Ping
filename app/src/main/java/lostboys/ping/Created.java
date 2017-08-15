@@ -20,7 +20,7 @@ import lostboys.ping.Models.EventEntry;
 import lostboys.ping.Models.Profile;
 
 
-public class Joined extends AppCompatActivity {
+public class Created extends AppCompatActivity {
     DatabaseReference mDatabase;
     //    Profile obj;
     ArrayList<EventEntry> events = new ArrayList<>();
@@ -34,7 +34,7 @@ public class Joined extends AppCompatActivity {
         setContentView(R.layout.activity_joined_events);
         firebaseAuth = FirebaseAuth.getInstance();
         user = firebaseAuth.getCurrentUser();
-        mDatabase = FirebaseDatabase.getInstance().getReference("users").child(user.getUid()).child("profile").child("eventsJoined");
+        mDatabase = FirebaseDatabase.getInstance().getReference("users").child(user.getUid()).child("profile").child("eventsCreated");
 
         mDatabase.addValueEventListener(new ValueEventListener() {
 
@@ -46,10 +46,10 @@ public class Joined extends AppCompatActivity {
                     EventEntry post = postSnapshot.getValue(EventEntry.class);
                     events.add(post);
                     RecyclerView rv = (RecyclerView) findViewById(R.id.rv);
-                    LinearLayoutManager llm = new LinearLayoutManager(Joined.this);
+                    LinearLayoutManager llm = new LinearLayoutManager(Created.this);
                     rv.setLayoutManager(llm);
 
-                    RVAdapterCreated adapter = new RVAdapterCreated(events);
+                    RVAdapter adapter = new RVAdapter(events);
                     rv.setAdapter(adapter);
 
                 }

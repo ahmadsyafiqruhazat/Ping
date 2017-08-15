@@ -6,13 +6,10 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.login.widget.ProfilePictureView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,7 +28,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  * Created by Syafiq on 23/7/2017.
  */
 
-public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
+public class RVAdapterCreated extends RecyclerView.Adapter<RVAdapterCreated.PersonViewHolder>{
     int j,y,x;
     String profileID;
     PersonViewHolder hold;
@@ -40,7 +37,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
     public static class PersonViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
         TextView day,month,time,event,par,des,host,place,loc;
-        Button delete;
         ProfilePictureView member1,member2,member3;
 
 
@@ -59,7 +55,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
             par=(TextView) itemView.findViewById(R.id.text_view_no_par);
             place=(TextView) itemView.findViewById(R.id.text_view_location_place);
             loc=(TextView) itemView.findViewById(R.id.text_view_location);
-            delete=(Button) itemView.findViewById(R.id.delete_button);
             member1=(ProfilePictureView) itemView.findViewById(R.id.imageView1);
             member2=(ProfilePictureView) itemView.findViewById(R.id.imageView2);
             member3=(ProfilePictureView) itemView.findViewById(R.id.imageView3);
@@ -67,7 +62,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
     }
         ArrayList<EventEntry> events;
 
-        RVAdapter(ArrayList<EventEntry> events){
+        RVAdapterCreated(ArrayList<EventEntry> events){
             this.events = events;
         }
 
@@ -78,7 +73,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
 
         @Override
         public PersonViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.event_created_card, viewGroup, false);
+            View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.event_card, viewGroup, false);
             PersonViewHolder pvh = new PersonViewHolder(v);
             return pvh;
         }
@@ -144,22 +139,7 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
 
 
 
-            personViewHolder.delete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
-                    FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
-                    DatabaseReference mDatabase =  FirebaseDatabase.getInstance().getReference();
-                    for(String name: events.get(j).members){
-                        mDatabase.child("users").child(name).child("profile").child("eventsJoined").child(events.get(j).key).removeValue();
-                    }
-                    mDatabase.child("events").child(events.get(j).key).removeValue();
-                    mDatabase.child("users").child(mFirebaseUser.getUid()).child("profile").child("eventsCreated").child(events.get(j).key).removeValue();
-                    Toast.makeText(getApplicationContext(),"event deleted",Toast.LENGTH_SHORT).show();
 
-                    notifyDataSetChanged();
-                }
-            });
         }
 
 

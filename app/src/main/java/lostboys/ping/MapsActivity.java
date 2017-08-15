@@ -286,8 +286,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     private void setupNavigationDrawer() {
         //if you want to update the items at a later time it is recommended to keep it in a variable
         PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(1).withName(R.string.drawer_item_notification);
-        PrimaryDrawerItem item2 = new PrimaryDrawerItem().withIdentifier(2).withName(R.string.drawer_item_past_events);
-        PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIdentifier(3).withName(R.string.drawer_item_rewards);
+        PrimaryDrawerItem item2 = new PrimaryDrawerItem().withIdentifier(2).withName("Created Events");
+        PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIdentifier(3).withName("Joined Events");
         SecondaryDrawerItem item4 = (SecondaryDrawerItem) new SecondaryDrawerItem().withIdentifier(4).withName(R.string.drawer_item_about_us).withIcon(FontAwesome.Icon.faw_info_circle);
         SecondaryDrawerItem item5 = (SecondaryDrawerItem) new SecondaryDrawerItem().withIdentifier(5).withName(R.string.drawer_item_feedback).withIcon(FontAwesome.Icon.faw_commenting);
         SecondaryDrawerItem item6 = (SecondaryDrawerItem) new SecondaryDrawerItem().withIdentifier(6).withName("Logout").withIcon(FontAwesome.Icon.faw_sign_out);
@@ -334,13 +334,15 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 
                             // View Past Events joined
                             case 2: {
-                                Intent myIntent = new Intent(MapsActivity.this, Joined.class);
+                                Intent myIntent = new Intent(MapsActivity.this, Created.class);
                                startActivity(myIntent);
                                 break;
                             }
 
                             // View Rewards
                             case 3: {
+                                Intent myIntent = new Intent(MapsActivity.this, Joined.class);
+                                startActivity(myIntent);
                                 break;
                             }
 

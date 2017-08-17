@@ -29,6 +29,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -95,6 +96,7 @@ public class EventCreate extends FragmentActivity
         submit.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
+                FirebaseMessaging.getInstance().unsubscribeFromTopic("news");
                 mFirebaseAuth = FirebaseAuth.getInstance();
                 mFirebaseUser = mFirebaseAuth.getCurrentUser();
                 mDatabase =  FirebaseDatabase.getInstance().getReference("users");
@@ -130,6 +132,8 @@ public class EventCreate extends FragmentActivity
                 finish();
             }
         });
+
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
     }
 
 

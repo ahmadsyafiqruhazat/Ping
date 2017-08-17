@@ -18,6 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -38,7 +39,7 @@ public class MainActivity extends Activity {
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_main);
 
-
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
 
         mDatabase =  FirebaseDatabase.getInstance().getReference("users");
 
@@ -52,9 +53,6 @@ public class MainActivity extends Activity {
 
                 }
     }
-
-
-
 
 
     public void getCurrentUser(){

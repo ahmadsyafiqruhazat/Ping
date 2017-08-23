@@ -207,9 +207,10 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(eventLoc));
                 }
             }
-        } else if (text.equals("Category")) {  // search by event category
+        }
+        if (text.equals("Category")) {  // search by event category
             for (EventEntry event: mEventEntries){
-                if (event.category.equals(text)){
+                if (event.category.equals(address)){
                     LatLng eventLoc = new LatLng(event.lat, event.lon);
                     Calendar cal = new GregorianCalendar();
                     cal.set(event.pickerYear, event.pickerMonth, event.pickerDay, event.pickerHour, event.pickerMin);

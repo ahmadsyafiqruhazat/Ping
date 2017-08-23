@@ -104,8 +104,7 @@ public class EventCreate extends FragmentActivity
                 String key = eventCloudEndPoint.push().getKey();
                 userCloudEndPoint =  mDatabase.child(
                         mFirebaseUser.getUid()).child("profile").child("eventsCreated").child(key);
-                userCloudEndPoint2 =  mDatabase.child(
-                        mFirebaseUser.getUid()).child("profile").child("eventsJoined").child(key);
+
                 ArrayList<String> members = new ArrayList<String>();
                 members.add(mFirebaseUser.getUid());
                 EventEntry event = new EventEntry(name.getText().toString(),text, pickerHour,pickerMin,
@@ -117,12 +116,7 @@ public class EventCreate extends FragmentActivity
                         Log.d("event", e.getLocalizedMessage());
                     }
                 });
-                userCloudEndPoint2.setValue(event).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d("event", e.getLocalizedMessage());
-                    }
-                });
+                
                 eventCloudEndPoint.child(key).setValue(event).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {

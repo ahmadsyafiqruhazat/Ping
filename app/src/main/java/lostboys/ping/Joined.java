@@ -49,7 +49,7 @@ public class Joined extends AppCompatActivity {
                     LinearLayoutManager llm = new LinearLayoutManager(Joined.this);
                     rv.setLayoutManager(llm);
 
-                    RVAdapterCreated adapter = new RVAdapterCreated(events);
+                    RVAdapter adapter = new RVAdapter(events);
                     rv.setAdapter(adapter);
                 }
             }

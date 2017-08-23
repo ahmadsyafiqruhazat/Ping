@@ -201,8 +201,32 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                     long time = cal.getTimeInMillis();
                     String formatted = (DateFormat.format("EEE, MMM d, 'at' HH:mm:ss", time))
                             .toString();
-                    Marker mMarker = mMap.addMarker(new MarkerOptions().position(eventLoc).title(event.name).snippet(formatted + "/n" + String.valueOf(event.members.size()) + "joined."));
+                    int size = event.members.size();
+                    Marker mMarker = mMap.addMarker(new MarkerOptions().position(eventLoc)
+                            .title(event.name)
+                            .snippet(formatted+",with "+String.valueOf(size)+" joining.")
+                            .icon(BitmapDescriptorFactory.defaultMarker(20))
+                            .alpha(1f));
                     mMarker.setTag(event.key);
+                    switch (event.category){
+                        case "Food":
+                            mMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.food));
+                            break;
+                        case "Party":
+                            mMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.party));
+                            break;
+                        case "Sports":
+                            mMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sports));
+                            break;
+                        case "Music":
+                            mMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.music));
+                            break;
+                        case "Shopping":
+                            mMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.shopping));
+                            break;
+                        default:
+                            break;
+                    }
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(eventLoc));
                 }
             }
@@ -216,8 +240,32 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                     long time = cal.getTimeInMillis();
                     String formatted = (DateFormat.format("EEE, MMM d, 'at' HH:mm:ss", time))
                             .toString();
-                    Marker mMarker = mMap.addMarker(new MarkerOptions().position(eventLoc).title(event.name).snippet(formatted + "/n" + String.valueOf(event.members.size()) + "joined."));
+                    int size = event.members.size();
+                    Marker mMarker = mMap.addMarker(new MarkerOptions().position(eventLoc)
+                            .title(event.name)
+                            .snippet(formatted+",with "+String.valueOf(size)+" joining.")
+                            .icon(BitmapDescriptorFactory.defaultMarker(20))
+                            .alpha(1f));
                     mMarker.setTag(event.key);
+                    switch (event.category){
+                        case "Food":
+                            mMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.food));
+                            break;
+                        case "Party":
+                            mMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.party));
+                            break;
+                        case "Sports":
+                            mMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sports));
+                            break;
+                        case "Music":
+                            mMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.music));
+                            break;
+                        case "Shopping":
+                            mMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.shopping));
+                            break;
+                        default:
+                            break;
+                    }
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(eventLoc));
                 }
             }
@@ -233,6 +281,41 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                         mMap.addMarker(new MarkerOptions().position(userLocation));
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
                         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                        for(EventEntry event : mEventEntries) {
+                            LatLng eventLoc = new LatLng(event.lat, event.lon);
+                            Calendar cal = new GregorianCalendar();
+                            cal.set(event.pickerYear, event.pickerMonth, event.pickerDay, event.pickerHour, event.pickerMin);
+                            long time = cal.getTimeInMillis();
+                            String formatted = (DateFormat.format("EEE, MMM d, 'at' HH:mm:ss", time))
+                                    .toString();
+                            int size = event.members.size();
+                            Marker mMarker = mMap.addMarker(new MarkerOptions().position(eventLoc)
+                                    .title(event.name)
+                                    .snippet(formatted + ",with " + String.valueOf(size) + " joining.")
+                                    .icon(BitmapDescriptorFactory.defaultMarker(20))
+                                    .alpha(1f));
+                            mMarker.setTag(event.key);
+                            switch (event.category) {
+                                case "Food":
+                                    mMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.food));
+                                    break;
+                                case "Party":
+                                    mMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.party));
+                                    break;
+                                case "Sports":
+                                    mMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.sports));
+                                    break;
+                                case "Music":
+                                    mMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.music));
+                                    break;
+                                case "Shopping":
+                                    mMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.shopping));
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                        }
                     }
                 } catch (IOException e) {
                     e.printStackTrace();

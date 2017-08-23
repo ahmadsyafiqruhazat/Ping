@@ -39,10 +39,6 @@ public class RVAdapterCreated extends RecyclerView.Adapter<RVAdapterCreated.Pers
         TextView day,month,time,event,par,des,host,place,loc;
         ProfilePictureView member1,member2,member3;
 
-
-
-
-
         PersonViewHolder(View itemView) {
             super(itemView);
             cv = (CardView) itemView.findViewById(R.id.cv);
@@ -101,7 +97,6 @@ public class RVAdapterCreated extends RecyclerView.Adapter<RVAdapterCreated.Pers
             personViewHolder.loc.setText(events.get(i).add);
             DatabaseReference mDatabase1 =  FirebaseDatabase.getInstance().getReference("users");
 
-
                 mDatabase1.addListenerForSingleValueEvent(new ValueEventListener() {
 
                     @Override
@@ -123,25 +118,12 @@ public class RVAdapterCreated extends RecyclerView.Adapter<RVAdapterCreated.Pers
 
                     }
 
-
-
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
-
-
                     }
                 });
-
-
-
-
-
-
-
-
         }
-
 
         @Override
         public void onAttachedToRecyclerView(RecyclerView recyclerView) {

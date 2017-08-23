@@ -38,22 +38,19 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(this.getApplicationContext());
         setContentView(R.layout.activity_main);
-
         FirebaseMessaging.getInstance().subscribeToTopic("news");
 
         mDatabase =  FirebaseDatabase.getInstance().getReference("users");
 
         firebaseAuth = FirebaseAuth.getInstance();
+
           user = firebaseAuth.getCurrentUser();
                 if (user == null) {
-
                     goLoginScreen();
                 }  else {
                     getCurrentUser();
-
                 }
     }
-
 
     public void getCurrentUser(){
         Toast.makeText(getApplicationContext(),"loading",Toast.LENGTH_SHORT).show();
@@ -87,16 +84,11 @@ public class MainActivity extends Activity {
 
                 Toast.makeText(getApplicationContext(),userProfile.userName,Toast.LENGTH_SHORT).show();
                 goMap();
-
-
-
             }
-
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 goMap();
-
             }
         });
     }
@@ -123,5 +115,4 @@ public class MainActivity extends Activity {
         LoginManager.getInstance().logOut();
         goLoginScreen();
     }
-
 }

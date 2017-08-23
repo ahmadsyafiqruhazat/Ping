@@ -188,7 +188,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 }
             }
         });
-
     }
 
     public void updateMap(String address) {          // search engine update
@@ -279,7 +278,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                         Double newLat = selectedResult.getLatitude();
                         Double newLong = selectedResult.getLongitude();
                         LatLng userLocation = new LatLng(newLat, newLong);
-                        mMap.addMarker(new MarkerOptions().position(userLocation));
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
                         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
                         for(EventEntry event : mEventEntries) {
@@ -426,28 +424,24 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                                 startActivity(myIntent);
                                 break;
                             }
-
                             // View Past Events joined
                             case 2: {
                                 Intent myIntent = new Intent(MapsActivity.this, Created.class);
                                startActivity(myIntent);
                                 break;
                             }
-
                             // View Rewards
                             case 3: {
                                 Intent myIntent = new Intent(MapsActivity.this, Joined.class);
                                 startActivity(myIntent);
                                 break;
                             }
-
                             //About us
                             case 5: {
                                 Intent myIntent = new Intent(MapsActivity.this, AboutUs.class);
                                 startActivity(myIntent);
                                 break;
                             }
-
                             //Feedback
                             case 6: {
                                 Intent myIntent = new Intent(MapsActivity.this, Feedback.class);

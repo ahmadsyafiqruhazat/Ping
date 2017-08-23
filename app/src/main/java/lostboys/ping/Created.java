@@ -49,9 +49,8 @@ public class Created extends AppCompatActivity {
                     LinearLayoutManager llm = new LinearLayoutManager(Created.this);
                     rv.setLayoutManager(llm);
 
-                    RVAdapter adapter = new RVAdapter(events);
+                    RVAdapterCreated adapter = new RVAdapterCreated(events);
                     rv.setAdapter(adapter);
-
                 }
             }
 

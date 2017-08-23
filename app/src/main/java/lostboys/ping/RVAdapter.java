@@ -137,11 +137,10 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
                     FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
                     DatabaseReference mDatabase =  FirebaseDatabase.getInstance().getReference();
                     for(String name: events.get(j).members){
-                        mDatabase.child("users").child(name).child("profile").child("eventsJoined").child(events.get(j).key).removeValue();
+                        mDatabase.child("users").child(name).child("profile").child("eventsJoined").child(events.get(j).key).child("members").child(mFirebaseUser.getUid()).removeValue();
                     }
-                    mDatabase.child("events").child(events.get(j).key).removeValue();
-                    mDatabase.child("users").child(mFirebaseUser.getUid()).child("profile").child("eventsCreated").child(events.get(j).key).removeValue();
-                    Toast.makeText(getApplicationContext(),"event deleted",Toast.LENGTH_SHORT).show();
+                    mDatabase.child("users").child(mFirebaseUser.getUid()).child("profile").child("eventsJoined").child(events.get(j).key).removeValue();
+                    Toast.makeText(getApplicationContext(),"Event Removed",Toast.LENGTH_SHORT).show();
 
                     notifyDataSetChanged();
                 }

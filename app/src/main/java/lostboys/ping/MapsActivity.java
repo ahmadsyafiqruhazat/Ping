@@ -146,10 +146,8 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 } else if ("customUrlItem".equals(tag)) {
                     return new IconicsDrawable(ctx).iconText(" ").backgroundColorRes(R.color.md_red_500).sizeDp(56);
                 }
-
                 //we use the default one for
                 //DrawerImageLoader.Tags.PROFILE_DRAWER_ITEM.name()
-
                 return super.placeholder(ctx, tag);
             }
         });
@@ -157,7 +155,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 
         // Spinner codes
         Spinner dynamicSpinner = (Spinner) findViewById(R.id.event_spinner);
-        String[] items = new String[] { "Event", "Place"};
+        String[] items = new String[] { "Event", "Place", "Category"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, items);
         dynamicSpinner.setAdapter(adapter);
@@ -193,8 +191,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 
     }
 
-
-
     public void updateMap(String address) {          // search engine update
         mMap.clear();
         if (text.equals("Event")) {                  // search by event name
@@ -211,23 +207,38 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(eventLoc));
                 }
             }
-        } else {                                      // search by place
-            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
-            try {
-                List<Address> addressResult = geocoder.getFromLocationName(address, 1);
-                if (!addressResult.isEmpty()) {
-                    Address selectedResult = addressResult.get(0);
-                    Double newLat = selectedResult.getLatitude();
-                    Double newLong = selectedResult.getLongitude();
-                    LatLng userLocation = new LatLng(newLat, newLong);
-                    mMap.addMarker(new MarkerOptions().position(userLocation));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
-                    mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
+        if (text.equals("Category")) {  // search by event category
+            for (EventEntry event: mEventEntries){
+                if (event.category.equals(address)){
+                    LatLng eventLoc = new LatLng(event.lat, event.lon);
+                    Calendar cal = new GregorianCalendar();
+                    cal.set(event.pickerYear, event.pickerMonth, event.pickerDay, event.pickerHour, event.pickerMin);
+                    long time = cal.getTimeInMillis();
+                    String formatted = (DateFormat.format("EEE, MMM d, 'at' HH:mm:ss", time))
+                            .toString();
+                    Marker mMarker = mMap.addMarker(new MarkerOptions().position(eventLoc).title(event.name).snippet(formatted + "/n" + String.valueOf(event.members.size()) + "joined."));
+                    mMarker.setTag(event.key);
+                    mMap.moveCamera(CameraUpdateFactory.newLatLng(eventLoc));
+                }
+            }
+        } else{                                      // search by place
+                Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+                try {
+                    List<Address> addressResult = geocoder.getFromLocationName(address, 1);
+                    if (!addressResult.isEmpty()) {
+                        Address selectedResult = addressResult.get(0);
+                        Double newLat = selectedResult.getLatitude();
+                        Double newLong = selectedResult.getLongitude();
+                        LatLng userLocation = new LatLng(newLat, newLong);
+                        mMap.addMarker(new MarkerOptions().position(userLocation));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
+                        mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
     }
 
     public void populateMap(){

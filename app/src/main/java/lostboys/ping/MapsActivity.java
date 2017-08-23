@@ -189,10 +189,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 }
             }
         });
-
     }
-
-
 
     public void updateMap(String address) {          // search engine update
         mMap.clear();
@@ -272,7 +269,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                         default:
                             break;
                     }
-
                 }
             }
             @Override
@@ -398,20 +394,14 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 //
 //                return super.placeholder(ctx, tag);
 //            }
-
     });
-
-
 //        result.addStickyFooterItem(new PrimaryDrawerItem().withName("Visit us again")); //Adding footer to nav drawer
     }
-
     // Event create button
     public void onButtonClick(View view){
         Intent intent = new Intent(MapsActivity.this, EventCreate.class);
         startActivity(intent);
     }
-
-
 
     // Drop down menu
 //    @Override
@@ -461,7 +451,6 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         mMap = googleMap;
 //        mMap.setPadding(0,0,0,0);
 //        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
@@ -497,14 +486,11 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
                 mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
             }}
-
         mMap.setOnInfoWindowClickListener(this);
     }
 
-
     @Override
     public void onInfoWindowClick(Marker marker) {
-
         // Inflate the popup_layout.xml
         RelativeLayout viewGroup = (RelativeLayout) findViewById(R.id.popup);
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -584,11 +570,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                 mDatabase2.setValue(finalTempEvent.members);
                 Toast.makeText(getApplicationContext(),"Event Joined",Toast.LENGTH_SHORT).show();
                 changeSortPopUp.dismiss();
-
             }
         });
     }
-
-
-
 }

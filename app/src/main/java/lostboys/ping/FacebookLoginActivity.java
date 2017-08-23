@@ -80,7 +80,6 @@ public class FacebookLoginActivity extends AppCompatActivity{
                 parameters.putString("fields", "id,name,email,gender, birthday");
                 request.setParameters(parameters);
                 request.executeAsync();
-
             }
             @Override
             public void onCancel() {
@@ -106,14 +105,12 @@ public class FacebookLoginActivity extends AppCompatActivity{
     }
     public void getCurrentUser(){
         Toast.makeText(getApplicationContext(),"loading",Toast.LENGTH_SHORT).show();
-
         mDatabase.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                             Profile userProfile;
                             if(dataSnapshot.exists()) {
-
                                 String userName = (String) dataSnapshot.child(user.getUid()).child("profile").child("userName").getValue();
                                 String picID = (String) dataSnapshot.child(user.getUid()).child("profile").child("picID").getValue();
                                 ArrayList<EventEntry> eventsJoined= new ArrayList<EventEntry>();
@@ -130,7 +127,6 @@ public class FacebookLoginActivity extends AppCompatActivity{
                                 userProfile = new Profile(userName, picID);
                                 mDatabase.child(user.getUid()).child("profile").setValue(userProfile);
                                 Toast.makeText(getApplicationContext(),"user created",Toast.LENGTH_SHORT).show();
-
                             }
                             SharedPreferences mPrefs = getSharedPreferences("myPrefs",MODE_PRIVATE);
                             SharedPreferences.Editor prefsEditor = mPrefs.edit();
@@ -139,17 +135,10 @@ public class FacebookLoginActivity extends AppCompatActivity{
                             prefsEditor.putString("User", json);
                             prefsEditor.commit();
                             goMainScreen();
-
-
-
-
-
-
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }
@@ -159,9 +148,6 @@ public class FacebookLoginActivity extends AppCompatActivity{
             userName = jsonObject.getString("name");
             picID = jsonObject.getString("id");
             Toast.makeText(getApplicationContext(),"profile loaded",Toast.LENGTH_SHORT).show();
-
-
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -51,14 +51,12 @@ public class Joined extends AppCompatActivity {
 
                     RVAdapterCreated adapter = new RVAdapterCreated(events);
                     rv.setAdapter(adapter);
-
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
-
             }
         });
 

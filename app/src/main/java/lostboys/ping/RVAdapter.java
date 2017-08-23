@@ -36,16 +36,11 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
     String profileID;
     PersonViewHolder hold;
 
-
     public static class PersonViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
         TextView day,month,time,event,par,des,host,place,loc;
         Button delete;
         ProfilePictureView member1,member2,member3;
-
-
-
-
 
         PersonViewHolder(View itemView) {
             super(itemView);
@@ -125,24 +120,13 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
                             }
                             y++;
                         }
-
                     }
-
-
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
                         Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
-
-
                     }
                 });
-
-
-
-
-
-
 
             personViewHolder.delete.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -132,7 +132,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
             personViewHolder.delete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FirebaseMessaging.getInstance().unsubscribeFromTopic("news");
                     FirebaseAuth mFirebaseAuth = FirebaseAuth.getInstance();
                     FirebaseUser mFirebaseUser = mFirebaseAuth.getCurrentUser();
                     DatabaseReference mDatabase =  FirebaseDatabase.getInstance().getReference();
@@ -146,7 +145,6 @@ public class RVAdapter extends RecyclerView.Adapter<RVAdapter.PersonViewHolder>{
                     notifyDataSetChanged();
                 }
             });
-            FirebaseMessaging.getInstance().subscribeToTopic("news");
         }
 
 

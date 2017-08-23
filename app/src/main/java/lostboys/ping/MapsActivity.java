@@ -230,6 +230,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
                         Double newLat = selectedResult.getLatitude();
                         Double newLong = selectedResult.getLongitude();
                         LatLng userLocation = new LatLng(newLat, newLong);
+                        mMap.addMarker(new MarkerOptions().position(userLocation));
                         mMap.moveCamera(CameraUpdateFactory.newLatLng(userLocation));
                         mMap.animateCamera(CameraUpdateFactory.zoomTo(15));
                     }

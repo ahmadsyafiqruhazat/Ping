@@ -82,7 +82,6 @@ import lostboys.ping.Models.EventEntry;
 import lostboys.ping.Models.Profile;
 import lostboys.ping.Pickers.AboutUs;
 import lostboys.ping.Pickers.Feedback;
-import lostboys.ping.Pickers.Notification;
 
 import static lostboys.ping.R.id.map;
 
@@ -98,6 +97,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     Button searchBtn;
     EditText addressET;
     PopupWindow changeSortPopUp;
+    View mapView;
 
     String text;    // spinner text
 
@@ -116,6 +116,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(map);
         mapFragment.getMapAsync(this);
+        mapView = mapFragment.getView();
         populateMap();
         SharedPreferences mPrefs = getSharedPreferences("myPrefs",MODE_PRIVATE);
         Gson gson = new Gson();
@@ -285,7 +286,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
     // Navigation Drawer
     private void setupNavigationDrawer() {
         //if you want to update the items at a later time it is recommended to keep it in a variable
-        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(1).withName(R.string.drawer_item_notification);
+        PrimaryDrawerItem item1 = new PrimaryDrawerItem().withIdentifier(1).withName("Rewards");
         PrimaryDrawerItem item2 = new PrimaryDrawerItem().withIdentifier(2).withName("Created Events");
         PrimaryDrawerItem item3 = new PrimaryDrawerItem().withIdentifier(3).withName("Joined Events");
         SecondaryDrawerItem item4 = (SecondaryDrawerItem) new SecondaryDrawerItem().withIdentifier(4).withName(R.string.drawer_item_about_us).withIcon(FontAwesome.Icon.faw_info_circle);
@@ -327,7 +328,7 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
 
                             // View Notifications
                             case 1: {
-                                Intent myIntent = new Intent(MapsActivity.this, Notification.class);
+                                Intent myIntent = new Intent(MapsActivity.this, Rewards.class);
                                 startActivity(myIntent);
                                 break;
                             }
@@ -461,6 +462,13 @@ public class MapsActivity extends AppCompatActivity implements GoogleMap.OnInfoW
         mMap = googleMap;
 //        mMap.setPadding(0,0,0,0);
 //        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        mMap.setMyLocationEnabled(true);
+        View locationButton = ((View) mapView.findViewById(Integer.parseInt("1")).getParent()).findViewById(Integer.parseInt("2"));
+        RelativeLayout.LayoutParams rlp = (RelativeLayout.LayoutParams) locationButton.getLayoutParams();
+// position on right bottom
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_TOP, 0);
+        rlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
+        rlp.setMargins(0, 0, 30, 250);
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {

@@ -1,0 +1,117 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:custom="http://schemas.android.com/tools"
+    android:background="@color/yellow">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="1">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="602dp">
+
+            <com.mikhaellopez.circularprogressbar.CircularProgressBar
+                android:id="@+id/prog"
+                android:layout_width="235dp"
+                android:layout_height="232dp"
+                android:layout_marginLeft="80dp"
+                android:layout_marginTop="50dp"
+                app:cpb_background_progressbar_color="#FFF"
+                app:cpb_background_progressbar_width="5dp"
+                app:cpb_progressbar_color="#000"
+                app:cpb_progressbar_width="10dp" />
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_marginStart="72dp"
+                android:layout_marginTop="22dp"
+                app:srcCompat="@drawable/medal"
+                android:layout_below="@+id/prog"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3/10 Events Created"
+                android:textColor="@android:color/black"
+                android:layout_below="@+id/imageView5"
+                android:layout_toStartOf="@+id/textView2"
+                android:layout_marginEnd="44dp" />
+
+            <ImageView
+                android:id="@+id/imageView9"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                app:srcCompat="@drawable/trophy"
+                android:layout_above="@+id/textView"
+                android:layout_alignEnd="@+id/prog" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="15/30 Events Joined"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:layout_below="@+id/imageView9"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="64dp" />
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:text="This month's progress"
+                android:textAppearance="@android:style/TextAppearance.Material.Title"
+                android:textColor="@android:color/black"
+                android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/prog"
+                android:layout_marginStart="18dp" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="45%"
+                android:textColor="@android:color/black"
+                android:textSize="50sp"
+                android:textStyle="bold"
+                android:layout_alignTop="@+id/prog"
+                android:layout_toStartOf="@+id/imageView9"
+                android:layout_marginTop="84dp" />
+
+            <ImageView
+                android:id="@+id/imageView10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="43dp"
+                app:srcCompat="@drawable/prof"
+                android:layout_below="@+id/textView"
+                android:layout_alignStart="@+id/imageView5" />
+
+            <TextView
+                android:id="@+id/level"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/imageView10"
+                android:layout_alignEnd="@+id/textView2"
+                android:layout_marginBottom="22dp"
+                android:layout_marginEnd="13dp"
+                android:text="Level 8"
+                android:textColor="@android:color/black"
+                android:textSize="40sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+</ScrollView>

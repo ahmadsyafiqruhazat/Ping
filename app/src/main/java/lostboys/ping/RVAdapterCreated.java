@@ -115,7 +115,6 @@ public class RVAdapterCreated extends RecyclerView.Adapter<RVAdapterCreated.Pers
                             }
                             y++;
                         }
-
                     }
 
                     @Override
